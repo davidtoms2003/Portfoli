@@ -1,0 +1,579 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { videos } from "../data/videos.mjs";
+---
+
+<BaseLayout title="My Videos" description="Archivo de viajes filmados con estética cinematográfica.">
+	<section class="catalog" data-video-board>
+		<header class="catalog__header">
+			<p class="eyebrow">Archivo</p>
+			<h1>Todos los videos</h1>
+			<p>
+				Hover o enfócate en cada título para visualizar el fotograma y la sinopsis. Las imágenes se expanden a
+				tamaño grande para sumergirte en el ambiente del viaje.
+			</p>
+		</header>
+		<div class="catalog__stage" data-video-stage>
+			<div class="catalog__backdrop">
+				{videos.map((video, index) => (
+					<img
+						class="catalog__backdrop-image"
+						src={video.backdrop ?? video.hero}
+						alt={`Fotograma del video ${video.title}`}
+						loading="lazy"
+						data-video-bg
+						data-index={index}
+					/>
+				))}
+			</div>
+			<div class="catalog__player" data-video-player hidden>
+				<button type="button" class="catalog__player-close" data-video-close aria-label="Cerrar video">
+					Cerrar
+				</button>
+				<div class="catalog__player-inner">
+					<div class="catalog__player-frame" data-video-frame>
+						<div class="catalog__player-placeholder" aria-hidden="true"></div>
+					</div>
+				</div>
+				<div class="catalog__player-message" data-video-message hidden>
+					<h3 data-video-message-heading>Proyección en preparación</h3>
+					<p data-video-message-body>
+						Pronto podrás ver esta pieza sin salir de aquí. Mientras tanto, puedes explorar las imágenes y la
+						sinopsis.
+					</p>
+				</div>
+			</div>
+			<ul class="catalog__list" data-video-list>
+				{videos.map((video, index) => (
+					<li class="catalog__item" data-video-item data-index={index}>
+						<button
+							type="button"
+							class="catalog__button"
+							data-video-trigger
+							data-index={index}
+							data-video-url={video.videoUrl}
+						>
+							<span class="catalog__title">{video.title}</span>
+							<span class="catalog__description">{video.description}</span>
+						</button>
+					</li>
+				))}
+			</ul>
+		</div>
+	</section>
+
+	<style>
+		.catalog {
+			display: grid;
+			gap: clamp(2.5rem, 6vw, 4rem);
+			position: relative;
+		}
+
+		.catalog__header {
+			display: grid;
+			gap: 1.2rem;
+			max-width: 34rem;
+		}
+
+		.catalog__header h1 {
+			margin: 0;
+			font-family: var(--font-display);
+			font-size: clamp(2.4rem, 6vw, 4rem);
+			letter-spacing: 0.24em;
+			text-transform: uppercase;
+		}
+
+		.catalog__header p {
+			margin: 0;
+			color: rgba(255, 255, 255, 0.72);
+			line-height: 1.8;
+		}
+
+		.catalog__stage {
+			position: relative;
+			height: clamp(660px, 74vh, 860px);
+			border-radius: clamp(24px, 4vw, 36px);
+			overflow: hidden;
+			isolation: isolate;
+			display: grid;
+			background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1), transparent 55%),
+				radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05), transparent 60%);
+			border: 1px solid rgba(255, 255, 255, 0.06);
+		}
+
+		.catalog__backdrop {
+			position: absolute;
+			inset: 0;
+			opacity: 0;
+			transition: opacity 260ms ease;
+		}
+
+		.catalog__backdrop::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(120deg, rgba(7, 7, 7, 0.15), rgba(7, 7, 7, 0.75));
+			opacity: 0;
+			transition: opacity 260ms ease;
+		}
+
+		.catalog--focused .catalog__backdrop,
+		.catalog--focused .catalog__backdrop::after {
+			opacity: 1;
+		}
+
+		.catalog__player {
+			position: absolute;
+			top: clamp(1.6rem, 4vw, 2.2rem);
+			left: clamp(1.6rem, 4vw, 2.2rem);
+			right: clamp(1.6rem, 4vw, 2.2rem);
+			bottom: clamp(1.6rem, 4vw, 2.2rem);
+			display: grid;
+			grid-template-rows: 1fr;
+			grid-template-columns: 1fr;
+			align-items: stretch;
+			justify-items: stretch;
+			border-radius: clamp(18px, 3vw, 28px);
+			background: rgba(7, 7, 7, 0.78);
+			backdrop-filter: blur(18px);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			transition: opacity 260ms ease;
+			opacity: 0;
+			pointer-events: none;
+			z-index: 3;
+			overflow: hidden;
+			min-width: 0;
+			min-height: 0;
+		}
+
+		.catalog__player.is-visible {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		.catalog__player-inner {
+			display: grid;
+			grid-template-rows: 1fr;
+			grid-template-columns: 1fr;
+			width: 100%;
+			height: 100%;
+			grid-area: 1 / 1 / -1 / -1;
+			align-items: stretch;
+			justify-items: stretch;
+			min-width: 0;
+			min-height: 0;
+		}
+
+		.catalog__player-frame {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			border-radius: clamp(16px, 3vw, 24px);
+			overflow: hidden;
+			box-shadow: 0 32px 80px rgba(0, 0, 0, 0.65);
+			background: #000;
+			min-width: 0;
+			min-height: 0;
+		}
+
+		.catalog__player-placeholder {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(7, 7, 7, 0.85));
+			animation: player-glow 1.2s ease-in-out infinite alternate;
+			transition: opacity 200ms ease;
+		}
+
+		.catalog__player-placeholder.is-hidden {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.catalog__player iframe {
+			position: relative;
+			display: block;
+			width: 100%;
+			height: 100%;
+			border: 0;
+			border-radius: inherit;
+		}
+
+		.catalog__player-message {
+			display: grid;
+			gap: 1rem;
+			text-align: center;
+			max-width: min(92%, 440px);
+			margin-inline: auto;
+			color: var(--text);
+			place-self: center;
+			grid-area: 1 / 1 / -1 / -1;
+			min-width: 0;
+			min-height: 0;
+		}
+
+		.catalog__player-message h3 {
+			margin: 0;
+			text-transform: uppercase;
+			letter-spacing: 0.24em;
+			font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+		}
+
+		.catalog__player-message p {
+			margin: 0;
+			line-height: 1.7;
+			color: rgba(255, 255, 255, 0.76);
+		}
+
+		.catalog__player-close {
+			position: absolute;
+			top: clamp(1rem, 3vw, 1.6rem);
+			right: clamp(1rem, 3vw, 1.6rem);
+			padding: 0.55rem 1.6rem;
+			text-transform: uppercase;
+			letter-spacing: 0.3em;
+			font-size: 0.7rem;
+			border-radius: 999px;
+			background: rgba(7, 7, 7, 0.6);
+			color: var(--text);
+			border: 1px solid rgba(255, 255, 255, 0.24);
+			cursor: pointer;
+			transition: background 200ms ease, transform 200ms ease;
+			z-index: 1;
+		}
+
+		.catalog__player-close:hover,
+		.catalog__player-close:focus-visible {
+			background: rgba(17, 17, 17, 0.9);
+			transform: translateY(-2px);
+		}
+
+		.catalog--player-open .catalog__list {
+			opacity: 0.22;
+			pointer-events: none;
+		}
+
+		.catalog--player-open .catalog__backdrop::after {
+			opacity: 0.85;
+		}
+
+		@keyframes player-glow {
+			0% {
+				opacity: 0.4;
+			}
+
+			100% {
+				opacity: 0.7;
+			}
+		}
+
+		.catalog__backdrop-image {
+			position: absolute;
+			inset: -5% -10% -5% -10%;
+			object-fit: cover;
+			width: 120%;
+			height: 110%;
+			opacity: 0;
+			filter: saturate(1.1) brightness(0.9);
+			transform: scale(1.06);
+			transition: opacity 320ms ease, transform 320ms ease;
+		}
+
+		.catalog__backdrop-image.is-active {
+			opacity: 1;
+			transform: scale(1.02);
+		}
+
+		.catalog__list {
+			position: relative;
+			margin: 0;
+			list-style: none;
+			padding: clamp(2.6rem, 6vw, 4rem);
+			display: grid;
+			gap: clamp(1rem, 2.4vw, 2rem);
+			z-index: 2;
+			max-height: 100%;
+			overflow-y: auto;
+			scrollbar-width: thin;
+			scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+		}
+
+		.catalog__list::-webkit-scrollbar {
+			width: 6px;
+		}
+
+		.catalog__list::-webkit-scrollbar-track {
+			background: transparent;
+		}
+
+		.catalog__list::-webkit-scrollbar-thumb {
+			background: rgba(255, 255, 255, 0.22);
+			border-radius: 999px;
+		}
+
+		.catalog__item {
+			transition: opacity 220ms ease, transform 220ms ease, filter 220ms ease;
+		}
+
+		.catalog__item.is-active {
+			opacity: 1 !important;
+			filter: none !important;
+			transform: translateY(0) scale(1);
+			z-index: 1;
+		}
+
+		.catalog--focused .catalog__item:not(.is-active) {
+			opacity: 0.18;
+			filter: blur(2px);
+			transform: translateY(12px);
+		}
+
+		.catalog__item button {
+			all: unset;
+			cursor: pointer;
+			display: grid;
+			gap: 0.8rem;
+		}
+
+		.catalog__title {
+			font-family: var(--font-display);
+			font-size: clamp(2rem, 5vw, 3.6rem);
+			letter-spacing: 0.34em;
+			text-transform: uppercase;
+		}
+
+		.catalog__description {
+			font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+			line-height: 1.9;
+			color: rgba(255, 255, 255, 0.8);
+			opacity: 0;
+			max-width: 38ch;
+			transition: opacity 220ms ease;
+		}
+
+		.catalog__item.is-active .catalog__description {
+			opacity: 1;
+		}
+
+		.catalog__hint {
+			justify-self: flex-end;
+			text-transform: uppercase;
+			letter-spacing: 0.34em;
+			font-size: 0.72rem;
+			color: rgba(255, 255, 255, 0.5);
+			margin-top: clamp(2rem, 5vw, 3rem);
+		}
+
+		@media (max-width: 960px) {
+			.catalog__stage {
+				height: auto;
+				min-height: 700px;
+			}
+
+			.catalog__player {
+				top: clamp(1.2rem, 6vw, 2.2rem);
+				left: clamp(1.2rem, 6vw, 2.2rem);
+				right: clamp(1.2rem, 6vw, 2.2rem);
+				bottom: clamp(1.2rem, 6vw, 2.2rem);
+			}
+
+			.catalog__player-frame {
+				width: 100%;
+			}
+
+			.catalog__backdrop-image {
+				inset: 0;
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		@media (max-width: 720px) {
+			.catalog__stage {
+				padding-block: 3.5rem;
+				min-height: auto;
+			}
+
+			.catalog__player {
+				inset: clamp(1rem, 6vw, 1.4rem);
+			}
+
+			.catalog__list {
+				gap: 1.4rem;
+				padding: clamp(1.8rem, 6vw, 3rem);
+				max-height: none;
+				overflow: visible;
+			}
+
+			.catalog__title {
+				letter-spacing: 0.18em;
+			}
+
+			.catalog__description {
+				display: none;
+			}
+
+			.catalog__hint {
+				justify-self: flex-start;
+			}
+		}
+	</style>
+
+	<script type="module">
+		const board = document.querySelector("[data-video-board]");
+		const list = board?.querySelector("[data-video-list]");
+		const triggers = board?.querySelectorAll("[data-video-trigger]");
+		const items = board?.querySelectorAll("[data-video-item]");
+		const backgrounds = board?.querySelectorAll("[data-video-bg]");
+		const player = board?.querySelector("[data-video-player]");
+		const playerFrame = player?.querySelector("[data-video-frame]");
+		const playerPlaceholder = player?.querySelector(".catalog__player-placeholder");
+		const closeButton = player?.querySelector("[data-video-close]");
+		const playerMessage = player?.querySelector("[data-video-message]");
+		const messageHeading = player?.querySelector("[data-video-message-heading]");
+		const messageBody = player?.querySelector("[data-video-message-body]");
+		let iframe;
+		let lastTrigger = null;
+		const restoreFocus = () => lastTrigger?.focus?.({ preventScroll: true });
+
+		const isPlayerOpen = () => board?.classList.contains("catalog--player-open");
+
+		const ensureIframe = () => {
+			if (!playerFrame) return null;
+			if (!iframe) {
+				iframe = document.createElement("iframe");
+				iframe.setAttribute(
+					"allow",
+					"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+				);
+				iframe.setAttribute("allowfullscreen", "");
+				iframe.setAttribute("loading", "lazy");
+				iframe.setAttribute("width", "100%");
+				iframe.setAttribute("height", "100%");
+				iframe.referrerPolicy = "strict-origin-when-cross-origin";
+				playerFrame.appendChild(iframe);
+			}
+			return iframe;
+		};
+
+		const buildEmbedSrc = (url) => {
+			if (!url) return "";
+			const connector = url.includes("?") ? "&" : "?";
+			return `${url}${connector}rel=0&modestbranding=1`;
+		};
+
+		const openPlayer = (trigger) => {
+			if (!player || !board) return;
+			const url = trigger?.dataset.videoUrl;
+			const titleText =
+				trigger?.querySelector(".catalog__title")?.textContent?.trim() || "Video";
+			lastTrigger = trigger;
+			const hasVideo = Boolean(url);
+
+			if (hasVideo) {
+				playerFrame?.removeAttribute("hidden");
+				playerMessage?.setAttribute("hidden", "");
+				const activeIframe = ensureIframe();
+				if (!activeIframe) return;
+				const embedSrc = buildEmbedSrc(url);
+				const markLoaded = () => playerPlaceholder?.classList.add("is-hidden");
+				playerPlaceholder?.classList.remove("is-hidden");
+				if (activeIframe.src !== embedSrc) {
+					activeIframe.src = embedSrc;
+					activeIframe.addEventListener("load", markLoaded, { once: true });
+				} else {
+					markLoaded();
+				}
+				activeIframe.setAttribute("title", `Reproductor de ${titleText}`);
+			} else {
+				if (iframe) {
+					iframe.src = "about:blank";
+				}
+				playerFrame?.setAttribute("hidden", "");
+				playerMessage?.removeAttribute("hidden");
+				if (messageHeading) {
+					messageHeading.textContent = `Próximamente: ${titleText}`;
+				}
+				if (messageBody) {
+					messageBody.textContent =
+						"Muy pronto podrás ver esta pieza directamente aquí. Mientras tanto, explora las imágenes y la sinopsis.";
+				}
+				playerPlaceholder?.classList.add("is-hidden");
+			}
+
+			player.removeAttribute("hidden");
+			requestAnimationFrame(() => {
+				player.classList.add("is-visible");
+				board.classList.add("catalog--player-open");
+			});
+			closeButton?.focus({ preventScroll: true });
+		};
+
+		const closePlayer = () => {
+			if (!player || !board) return;
+			player.classList.remove("is-visible");
+			board.classList.remove("catalog--player-open");
+			if (iframe) {
+				iframe.src = "about:blank";
+			}
+			const handleTransitionEnd = () => {
+				player.setAttribute("hidden", "");
+				playerPlaceholder?.classList.remove("is-hidden");
+				playerMessage?.setAttribute("hidden", "");
+				playerFrame?.removeAttribute("hidden");
+				player.removeEventListener("transitionend", handleTransitionEnd);
+			};
+			player.addEventListener("transitionend", handleTransitionEnd);
+			restoreFocus();
+		};
+
+		const clearActive = () => {
+			if (isPlayerOpen()) return;
+			board?.classList.remove("catalog--focused");
+			items?.forEach((item) => item.classList.remove("is-active"));
+			backgrounds?.forEach((bg) => bg.classList.remove("is-active"));
+		};
+
+		const activateIndex = (index) => {
+			board?.classList.add("catalog--focused");
+			items?.forEach((item) => {
+				item.classList.toggle("is-active", item.dataset.index === index);
+			});
+			backgrounds?.forEach((bg) => {
+				bg.classList.toggle("is-active", bg.dataset.index === index);
+			});
+		};
+
+		triggers?.forEach((trigger) => {
+			const index = trigger.dataset.index;
+			trigger.addEventListener("pointerenter", () => activateIndex(index));
+			trigger.addEventListener("focus", () => activateIndex(index));
+			trigger.addEventListener("click", (event) => {
+				event.preventDefault();
+				activateIndex(index);
+				openPlayer(trigger);
+			});
+		});
+
+		closeButton?.addEventListener("click", () => closePlayer());
+
+		player?.addEventListener("click", (event) => {
+			if (event.target === player) {
+				closePlayer();
+			}
+		});
+
+		list?.addEventListener("pointerleave", clearActive);
+		list?.addEventListener("focusout", (event) => {
+			if (!list.contains(event.relatedTarget)) {
+				clearActive();
+			}
+		});
+
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape" && isPlayerOpen()) {
+				event.preventDefault();
+				closePlayer();
+			}
+		});
+	</script>
+</BaseLayout>

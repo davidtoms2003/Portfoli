@@ -1,0 +1,97 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="About" description="Sobre el filmmaker detrás de Film Diary.">
+	<section class="about">
+		<header class="about__header">
+			<p class="eyebrow">Sobre mí</p>
+			<h1>David Tomás Velasco</h1>
+			<p>
+				Filmmaker y director de fotografía en búsqueda de memorias compartidas. Mi cámara viaja conmigo desde
+				las montañas del Cáucaso hasta los templos de Asia. Persigo la luz natural, el sonido ambiental y la
+				delicadeza de los retratos espontáneos.
+			</p>
+		</header>
+		<div class="about__grid">
+			<div class="about__card">
+				<h2>Forma de trabajo</h2>
+				<p>
+					Trabajo con equipos ligeros, capturando narrativas íntimas. Me interesa filmar la energía de un grupo de
+					amigos, los silencios de una comunidad y los paisajes que invitan a respirar más lento.
+				</p>
+			</div>
+			<div class="about__card">
+				<h2>Intereses</h2>
+				<p>
+					Me atrae el cine independiente, la música ambiental y los diarios escritos durante el viaje. Cada video
+					está montado como si fuese una carta dedicada a quienes compartieron la ruta.
+				</p>
+			</div>
+			<div class="about__card">
+				<h2>Colaboraciones</h2>
+				<p>
+					Estoy abierto a colaborar con productoras, marcas o artistas que busquen una narrativa visual honesta con
+					énfasis en la experiencia humana.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<style>
+		.about {
+			display: grid;
+			gap: clamp(2.5rem, 6vw, 4rem);
+		}
+
+		.about__header {
+			display: grid;
+			gap: 1.4rem;
+			max-width: 40rem;
+		}
+
+		.about__header h1 {
+			margin: 0;
+			font-family: var(--font-display);
+			font-size: clamp(2.8rem, 6vw, 4.6rem);
+			letter-spacing: 0.28em;
+			text-transform: uppercase;
+		}
+
+		.about__header p {
+			margin: 0;
+			font-size: clamp(1rem, 1.7vw, 1.25rem);
+			line-height: 1.9;
+			color: rgba(255, 255, 255, 0.78);
+		}
+
+		.about__grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: clamp(1.8rem, 4vw, 2.6rem);
+		}
+
+		.about__card {
+			padding: clamp(1.8rem, 4vw, 2.6rem);
+			border-radius: clamp(18px, 3vw, 24px);
+			background: linear-gradient(140deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+			display: grid;
+			gap: 0.9rem;
+		}
+
+		.about__card h2 {
+			margin: 0;
+			font-size: clamp(1.1rem, 2vw, 1.6rem);
+			letter-spacing: 0.2em;
+			text-transform: uppercase;
+		}
+
+		.about__card p {
+			margin: 0;
+			line-height: 1.8;
+			color: rgba(255, 255, 255, 0.78);
+		}
+	</style>
+</BaseLayout>

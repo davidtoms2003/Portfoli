@@ -1,0 +1,347 @@
+---
+const { title = "", description = "" } = Astro.props;
+const pageTitle = title ? `${title} | Film Diary` : "Film Diary";
+const navLinks = [
+	{ href: "/", label: "Home" },
+	{ href: "/my-videos", label: "My Videos" },
+	{ href: "/about", label: "About Me" },
+];
+---
+
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={description || "Portfolio de filmmaker con viajes y diarios visuales."} />
+		<title>{pageTitle}</title>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<style>
+			:root {
+				color-scheme: dark;
+				--bg: #070707;
+				--bg-soft: #111111;
+				--bg-overlay: rgba(7, 7, 7, 0.82);
+				--text: #f7f5ef;
+				--muted: #c8c6bc;
+				--accent: #f6c564;
+				--accent-soft: rgba(246, 197, 100, 0.2);
+				--font-sans: "Inter", "Neue Haas Grotesk", "Helvetica Neue", Arial, sans-serif;
+				--font-display: "Bai Jamjuree", "Inter", "Helvetica Neue", sans-serif;
+			}
+
+			html,
+			body {
+				margin: 0;
+				min-height: 100%;
+			}
+
+			body {
+				font-family: var(--font-sans);
+				background: var(--bg);
+				color: var(--text);
+				display: flex;
+			}
+
+			main {
+				flex: 1;
+				padding: clamp(2rem, 4vw, 6rem) clamp(1.5rem, 5vw, 6rem) 5rem;
+				position: relative;
+			}
+
+			.mobile-nav {
+				display: none;
+			}
+
+			.sidebar-hover-zone {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 54px;
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				pointer-events: auto;
+				z-index: 97;
+			}
+
+			.sidebar-handle {
+				appearance: none;
+				border: none;
+				border-radius: 999px;
+				padding: 1.2rem 0.75rem;
+				background: rgba(7, 7, 7, 0.78);
+				box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+				cursor: pointer;
+				display: grid;
+				place-items: center;
+				gap: 0.4rem;
+				transform: translateX(-18px);
+				transition: transform 220ms ease, background 220ms ease, box-shadow 220ms ease;
+			}
+
+			.sidebar-handle:hover,
+			.sidebar-handle:focus-visible {
+				background: rgba(17, 17, 17, 0.9);
+				transform: translateX(-6px);
+				box-shadow: 0 22px 44px rgba(0, 0, 0, 0.55);
+			}
+
+			.sidebar-handle__icon {
+				width: 18px;
+				height: 14px;
+				position: relative;
+			}
+
+			.sidebar-handle__icon::before,
+			.sidebar-handle__icon::after,
+			.sidebar-handle__middle {
+				content: "";
+				position: absolute;
+				left: 0;
+				right: 0;
+				height: 2px;
+				border-radius: 999px;
+				background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.85));
+			}
+
+			.sidebar-handle__icon::before {
+				top: 0;
+			}
+
+			.sidebar-handle__icon::after {
+				bottom: 0;
+			}
+
+			.sidebar-handle__middle {
+				top: 50%;
+				transform: translateY(-50%);
+			}
+
+			.sidebar-handle__label {
+				font-size: 0.6rem;
+				letter-spacing: 0.42em;
+				text-transform: uppercase;
+				color: rgba(255, 255, 255, 0.65);
+				writing-mode: vertical-rl;
+			}
+
+			.sidebar {
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 100vh;
+				width: clamp(280px, 26vw, 360px);
+				padding: clamp(2.4rem, 4vw, 4.5rem) clamp(2rem, 3vw, 3.5rem);
+				display: flex;
+				flex-direction: column;
+				gap: clamp(2rem, 2.5vw, 3rem);
+				background: linear-gradient(120deg, rgba(17, 17, 17, 0.96), rgba(7, 7, 7, 0.92));
+				border-right: 1px solid rgba(255, 255, 255, 0.06);
+				box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+				transform: translateX(-100%);
+				transition: transform 280ms ease;
+				z-index: 98;
+			}
+
+			.sidebar[data-open="true"] {
+				transform: translateX(0);
+			}
+
+			.brand {
+				font-family: var(--font-display);
+				font-size: clamp(2.5rem, 5vw, 4.6rem);
+				text-transform: uppercase;
+				letter-spacing: 0.28em;
+				line-height: 0.9;
+				pointer-events: none;
+			}
+
+			.nav-list {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				gap: clamp(1rem, 1.6vw, 1.8rem);
+			}
+
+			.nav-link {
+				text-decoration: none;
+				color: var(--muted);
+				font-size: clamp(1rem, 1.7vw, 1.5rem);
+				letter-spacing: 0.42em;
+				text-transform: uppercase;
+				background: none;
+				border: none;
+				padding: 0;
+				cursor: pointer;
+				text-align: left;
+				transition: color 220ms ease;
+			}
+
+			.nav-link:hover,
+			.nav-link[aria-current="page"] {
+				color: var(--text);
+			}
+
+			.sidebar-footer {
+				margin-top: auto;
+				font-size: 0.85rem;
+				color: var(--muted);
+				max-width: 18ch;
+				line-height: 1.7;
+			}
+
+			@media (max-width: 960px) {
+				.sidebar,
+				.sidebar-hover-zone {
+					display: none;
+				}
+
+				body {
+					flex-direction: column;
+				}
+
+				main {
+					padding: clamp(1.6rem, 5vw, 4rem) clamp(1.2rem, 5vw, 3.2rem) 4rem;
+				}
+
+				.mobile-nav {
+					display: flex;
+					gap: 1rem;
+					margin-bottom: clamp(2rem, 5vw, 3rem);
+				}
+
+				.mobile-nav a {
+					flex: 1;
+					text-decoration: none;
+					color: var(--text);
+					text-transform: uppercase;
+					font-size: 0.75rem;
+					letter-spacing: 0.28em;
+					padding: 0.85rem 1rem;
+					border: 1px solid rgba(255, 255, 255, 0.08);
+					border-radius: 30px;
+					text-align: center;
+				}
+			}
+		</style>
+		<slot name="head" />
+	</head>
+	<body data-layout>
+		<div class="sidebar-hover-zone" data-sidebar-hover>
+			<button class="sidebar-handle" type="button" aria-label="Abrir menú" aria-expanded="false" data-sidebar-handle>
+				<span class="sidebar-handle__icon">
+					<span class="sidebar-handle__middle"></span>
+				</span>
+				<span class="sidebar-handle__label" aria-hidden="true">Menú</span>
+			</button>
+		</div>
+		<aside class="sidebar" data-sidebar>
+			<div class="brand">Film Diary</div>
+			<nav>
+				<ul class="nav-list">
+					{navLinks.map((link) => (
+						<li>
+							<a
+								class="nav-link"
+								href={link.href}
+								aria-current={Astro.url.pathname === link.href ? "page" : undefined}
+							>
+								{link.label}
+							</a>
+						</li>
+					))}
+				</ul>
+			</nav>
+			<div class="sidebar-footer">
+				Cine de viaje y memoria. Historias contadas con luz natural y ritmo íntimo.
+			</div>
+		</aside>
+		<main>
+			<nav class="mobile-nav" aria-label="Navegación principal">
+				{navLinks.map((link) => (
+					<a href={link.href} aria-current={Astro.url.pathname === link.href ? "page" : undefined}>
+						{link.label}
+					</a>
+				))}
+			</nav>
+			<slot />
+		</main>
+		<script type="module">
+			const sidebar = document.querySelector("[data-sidebar]");
+			const hoverZone = document.querySelector("[data-sidebar-hover]");
+			const handle = document.querySelector("[data-sidebar-handle]");
+			const layout = document.querySelector("[data-layout]");
+
+			const isDesktop = () => !window.matchMedia("(max-width: 960px)").matches;
+
+			const setOpen = (value) => {
+				const state = value ? "true" : "false";
+				sidebar.dataset.open = state;
+				handle?.setAttribute("aria-expanded", state);
+				layout?.setAttribute("data-sidebar-open", state);
+			};
+
+			const toggleOpen = () => {
+				const nextState = sidebar?.dataset.open !== "true";
+				setOpen(nextState);
+			};
+
+			const handlePointerLeave = (event) => {
+				if (!isDesktop()) return;
+				const related = event.relatedTarget;
+				if (!sidebar.contains(related) && related !== hoverZone && related !== handle) {
+					setOpen(false);
+				}
+			};
+
+			if (sidebar && hoverZone) {
+				setOpen(false);
+
+				handle?.addEventListener("pointerenter", () => {
+					if (!isDesktop()) return;
+					setOpen(true);
+				});
+
+				handle?.addEventListener("focus", () => {
+					if (!isDesktop()) return;
+					setOpen(true);
+				});
+
+				handle?.addEventListener("click", (event) => {
+					event.preventDefault();
+					toggleOpen();
+				});
+
+				hoverZone.addEventListener("pointerenter", () => {
+					if (!isDesktop()) return;
+					setOpen(true);
+				});
+
+				hoverZone.addEventListener("pointerleave", (event) => {
+					const related = event.relatedTarget;
+					if (related !== sidebar && related !== handle) {
+						setOpen(false);
+					}
+				});
+
+				sidebar.addEventListener("pointerleave", handlePointerLeave);
+				sidebar.addEventListener("focusin", () => setOpen(true));
+				sidebar.addEventListener("focusout", (event) => {
+					if (!sidebar.contains(event.relatedTarget)) {
+						setOpen(false);
+					}
+				});
+
+				document.addEventListener("keydown", (event) => {
+					if (event.key === "Escape") {
+						setOpen(false);
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,291 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { videos } from "../data/videos.mjs";
+
+const [featured, ...recent] = videos;
+---
+<BaseLayout title="Home">
+	<section class="hero" aria-labelledby="home-heading">
+		<header class="hero__header">
+			<p class="eyebrow">Último estreno</p>
+			<h1 id="home-heading">{featured.title}</h1>
+			<p class="lede">{featured.description}</p>
+			<a class="hero__link" href="/my-videos">Ver todos los videos</a>
+		</header>
+		<figure class="hero__frame">
+			<img src={featured.hero} alt={`Fotograma destacado del video ${featured.title}`} loading="eager" />
+			<figcaption>{featured.title}</figcaption>
+		</figure>
+	</section>
+
+	<section class="latest" aria-labelledby="latest-heading">
+		<header class="latest__header">
+			<p class="eyebrow">Recientes</p>
+			<h2 id="latest-heading">Viajes que siguen latiendo</h2>
+		</header>
+		<div class="latest__grid">
+			{recent.map((video) => (
+				<article class="latest-card" id={`card-${video.slug}`}>
+					<img src={video.preview} alt={`Fotograma del video ${video.title}`} loading="lazy" />
+					<div class="latest-card__meta">
+						<h3>{video.title}</h3>
+						<p>{video.description}</p>
+					</div>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="cta" aria-labelledby="cta-heading">
+		<div class="cta__inner">
+			<h2 id="cta-heading">Narrativas de viaje con corazón cinematográfico</h2>
+			<p>
+				Explora el archivo completo de piezas cortas, diarios de ruta y retratos de los lugares que marcaron
+				nuestras aventuras colectivas.
+			</p>
+			<a class="cta__button" href="/my-videos">Entrar al archivo</a>
+		</div>
+	</section>
+
+	<style>
+		:global(body) {
+			background: #070707;
+		}
+
+		.hero {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: clamp(2rem, 6vw, 4rem);
+			align-items: center;
+		}
+
+		.hero__header {
+			display: grid;
+			gap: clamp(1rem, 2vw, 1.6rem);
+			max-width: 32rem;
+		}
+
+		.eyebrow {
+			font-size: 0.82rem;
+			letter-spacing: 0.42em;
+			text-transform: uppercase;
+			color: rgba(255, 255, 255, 0.6);
+			margin: 0;
+		}
+
+		h1 {
+			font-family: var(--font-display);
+			font-size: clamp(3rem, 6vw, 5.2rem);
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			margin: 0;
+			font-weight: 600;
+		}
+
+		.lede {
+			margin: 0;
+			font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+			line-height: 1.8;
+			color: rgba(247, 245, 239, 0.82);
+		}
+
+		.hero__link {
+			color: var(--text);
+			text-transform: uppercase;
+			letter-spacing: 0.32em;
+			font-size: 0.85rem;
+			text-decoration: none;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+			padding-bottom: 0.35rem;
+			width: fit-content;
+		}
+
+		.hero__frame {
+			position: relative;
+			margin: 0;
+		}
+
+		.hero__frame img {
+			width: 100%;
+			height: clamp(320px, 60vh, 520px);
+			object-fit: cover;
+			border-radius: clamp(18px, 3vw, 24px);
+			box-shadow: 0 32px 80px rgba(0, 0, 0, 0.45);
+			filter: saturate(0.95) contrast(1.02);
+		}
+
+		.hero__frame::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+			background: linear-gradient(190deg, rgba(7, 7, 7, 0.12), rgba(7, 7, 7, 0.72));
+			mix-blend-mode: multiply;
+			pointer-events: none;
+		}
+
+		.hero__frame figcaption {
+			position: absolute;
+			bottom: 1.6rem;
+			left: 1.6rem;
+			padding: 0.6rem 1rem;
+			background: rgba(7, 7, 7, 0.7);
+			display: inline-flex;
+			letter-spacing: 0.28em;
+			text-transform: uppercase;
+			font-size: 0.75rem;
+			z-index: 1;
+		}
+
+		.latest {
+			display: grid;
+			gap: clamp(2rem, 5vw, 3.5rem);
+		}
+
+		.latest__header h2 {
+			margin: 0;
+			font-size: clamp(2rem, 4vw, 3rem);
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+		}
+
+		.latest__grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+			gap: clamp(1.8rem, 3vw, 2.6rem);
+		}
+
+		.latest-card {
+			position: relative;
+			border-radius: 22px;
+			overflow: hidden;
+			isolation: isolate;
+			background: rgba(255, 255, 255, 0.04);
+			box-shadow: 0 22px 44px rgba(0, 0, 0, 0.34);
+			transition: transform 280ms ease, box-shadow 280ms ease;
+		}
+
+		.latest-card::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.75));
+			opacity: 0.9;
+			transition: opacity 240ms ease;
+			pointer-events: none;
+		}
+
+		.latest-card:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 34px 70px rgba(0, 0, 0, 0.5);
+		}
+
+		.latest-card:hover::after {
+			opacity: 1;
+		}
+
+		.latest-card img {
+			display: block;
+			width: 100%;
+			height: clamp(260px, 28vw, 360px);
+			object-fit: cover;
+		}
+
+		.latest-card__meta {
+			position: absolute;
+			inset: auto 0 0 0;
+			padding: clamp(1.4rem, 3vw, 2rem);
+			z-index: 2;
+			display: grid;
+			gap: 0.6rem;
+		}
+
+		.latest-card__meta h3 {
+			margin: 0;
+			font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			font-weight: 600;
+		}
+
+		.latest-card__meta p {
+			margin: 0;
+			font-size: 0.95rem;
+			line-height: 1.7;
+			color: rgba(255, 255, 255, 0.78);
+		}
+
+		.cta {
+			padding: clamp(2.5rem, 6vw, 4.8rem);
+			border-radius: clamp(20px, 3vw, 28px);
+			background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), transparent 55%),
+				radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 60%);
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			max-width: 980px;
+			margin-inline: auto;
+		}
+
+		.cta__inner {
+			display: grid;
+			gap: 1.4rem;
+		}
+
+		.cta__inner h2 {
+			margin: 0;
+			font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+		}
+
+		.cta__inner p {
+			margin: 0;
+			color: rgba(255, 255, 255, 0.82);
+			font-size: clamp(1rem, 1.5vw, 1.2rem);
+			line-height: 1.8;
+		}
+
+		.cta__button {
+			justify-self: flex-start;
+			text-decoration: none;
+			text-transform: uppercase;
+			letter-spacing: 0.28em;
+			font-size: 0.78rem;
+			padding: 0.9rem 1.8rem;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.1);
+			color: var(--text);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			transition: background 220ms ease, transform 220ms ease;
+		}
+
+		.cta__button:hover {
+			transform: translateY(-2px);
+			background: rgba(255, 255, 255, 0.2);
+		}
+
+		@media (max-width: 960px) {
+			.hero {
+				grid-template-columns: 1fr;
+			}
+
+			.hero__frame img {
+				height: clamp(280px, 52vw, 420px);
+			}
+		}
+
+		@media (max-width: 640px) {
+			.latest__grid {
+				grid-template-columns: 1fr;
+			}
+
+			.hero__header {
+				order: 2;
+				margin-top: 1rem;
+			}
+
+			.hero__frame {
+				order: 1;
+			}
+		}
+	</style>
+</BaseLayout>
