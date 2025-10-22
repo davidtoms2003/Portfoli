@@ -14,7 +14,7 @@ import { videos } from "../data/videos.mjs";
 			</p>
 		</header>
 		<div class="catalog__stage" data-video-stage>
-			<div class="catalog__backdrop">
+			<div class="catalog__backdrop catalog__backdrop--full">
 				{videos.map((video, index) => (
 					<img
 						class="catalog__backdrop-image"
@@ -91,21 +91,32 @@ import { videos } from "../data/videos.mjs";
 
 		.catalog__stage {
 			position: relative;
-			height: clamp(660px, 74vh, 860px);
-			border-radius: clamp(24px, 4vw, 36px);
-			overflow: hidden;
+			height: auto;
+			min-height: 100vh; /* occupy whole viewport */
+			border-radius: 0; /* remove rounding so backdrop fills edge-to-edge */
+			overflow: visible;
 			isolation: isolate;
 			display: grid;
-			background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1), transparent 55%),
-				radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05), transparent 60%);
-			border: 1px solid rgba(255, 255, 255, 0.06);
+			background: transparent;
+			border: none;
 		}
 
 		.catalog__backdrop {
-			position: absolute;
+			position: fixed; /* detach from layout and fill viewport */
 			inset: 0;
+			z-index: 0;
 			opacity: 0;
 			transition: opacity 260ms ease;
+			pointer-events: none;
+		}
+
+		.catalog__backdrop--full::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(180deg, rgba(7,7,7,0.25), rgba(7,7,7,0.6));
+			mix-blend-mode: multiply;
+			pointer-events: none;
 		}
 
 		.catalog__backdrop::after {
@@ -123,11 +134,13 @@ import { videos } from "../data/videos.mjs";
 		}
 
 		.catalog__player {
-			position: absolute;
-			top: clamp(1.6rem, 4vw, 2.2rem);
+			/* fix to viewport so the player doesn't stretch with the long page */
+			position: fixed;
 			left: clamp(1.6rem, 4vw, 2.2rem);
 			right: clamp(1.6rem, 4vw, 2.2rem);
-			bottom: clamp(1.6rem, 4vw, 2.2rem);
+			top: 50%;
+			transform: translateY(-50%);
+			max-height: 80vh; /* prevent occupying full vertical space */
 			display: grid;
 			grid-template-rows: 1fr;
 			grid-template-columns: 1fr;
@@ -137,7 +150,7 @@ import { videos } from "../data/videos.mjs";
 			background: rgba(7, 7, 7, 0.78);
 			backdrop-filter: blur(18px);
 			border: 1px solid rgba(255, 255, 255, 0.08);
-			transition: opacity 260ms ease;
+			transition: opacity 260ms ease, transform 200ms ease;
 			opacity: 0;
 			pointer-events: none;
 			z-index: 3;
@@ -167,7 +180,9 @@ import { videos } from "../data/videos.mjs";
 		.catalog__player-frame {
 			position: relative;
 			width: 100%;
-			height: 100%;
+			height: auto;
+			aspect-ratio: 16 / 9; /* keep video aspect and avoid full-height stretching */
+			max-height: 80vh;
 			border-radius: clamp(16px, 3vw, 24px);
 			overflow: hidden;
 			box-shadow: 0 32px 80px rgba(0, 0, 0, 0.65);
@@ -199,16 +214,25 @@ import { videos } from "../data/videos.mjs";
 		}
 
 		.catalog__player-message {
+			/* fill the player area so the message has the same visual weight as the video */
 			display: grid;
+			place-items: center;
 			gap: 1rem;
 			text-align: center;
-			max-width: min(92%, 440px);
-			margin-inline: auto;
+			width: 100%;
+			height: 100%;
+			padding: clamp(1.2rem, 3vw, 2rem);
+			box-sizing: border-box;
 			color: var(--text);
-			place-self: center;
 			grid-area: 1 / 1 / -1 / -1;
 			min-width: 0;
 			min-height: 0;
+		}
+
+		/* limit the internal text width for comfortable reading while letting the container fill the player */
+		.catalog__player-message > * {
+			max-width: min(92%, 760px);
+			margin: 0 auto;
 		}
 
 		.catalog__player-message h3 {
@@ -268,14 +292,14 @@ import { videos } from "../data/videos.mjs";
 
 		.catalog__backdrop-image {
 			position: absolute;
-			inset: -5% -10% -5% -10%;
+			inset: 0;
 			object-fit: cover;
-			width: 120%;
-			height: 110%;
+			width: 100%;
+			height: 100%;
 			opacity: 0;
-			filter: saturate(1.1) brightness(0.9);
-			transform: scale(1.06);
-			transition: opacity 320ms ease, transform 320ms ease;
+			filter: saturate(1.05) brightness(0.85);
+			transform: scale(1.02);
+			transition: opacity 420ms ease, transform 420ms ease, filter 420ms ease;
 		}
 
 		.catalog__backdrop-image.is-active {
@@ -287,14 +311,12 @@ import { videos } from "../data/videos.mjs";
 			position: relative;
 			margin: 0;
 			list-style: none;
-			padding: clamp(2.6rem, 6vw, 4rem);
+			padding: clamp(6rem, 12vh, 8rem) clamp(2.6rem, 6vw, 4rem);
 			display: grid;
 			gap: clamp(1rem, 2.4vw, 2rem);
-			z-index: 2;
-			max-height: 100%;
-			overflow-y: auto;
-			scrollbar-width: thin;
-			scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+			z-index: 2; /* sit above backdrop */
+			max-height: none;
+			overflow: visible; /* show entries directly on page */
 		}
 
 		.catalog__list::-webkit-scrollbar {

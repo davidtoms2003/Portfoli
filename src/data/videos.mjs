@@ -7,6 +7,7 @@ export const videos = [
     hero: "/thumbnails/BALI1.jpg",
     preview: "/thumbnails/BALI2.jpg",
     backdrop: "/thumbnails/BALI2.jpg",
+    videoUrl: "https://www.youtube.com/embed/JOt19nrIL0g?si=vgg_K7txsIhOLl6X",
   },
   {
     slug: "georgia",
