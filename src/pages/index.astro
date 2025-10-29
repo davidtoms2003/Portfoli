@@ -2,6 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { videos } from "../data/videos.mjs";
 
+const base: string = import.meta.env.BASE_URL || "/";
+const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
+
 const [featured, ...recent] = videos;
 ---
 <BaseLayout title="Home">
@@ -10,10 +13,10 @@ const [featured, ...recent] = videos;
 			<p class="eyebrow">Último estreno</p>
 			<h1 id="home-heading">{featured.title}</h1>
 			<p class="lede">{featured.description}</p>
-			<a class="hero__link" href="/my-videos">Ver todos los videos</a>
+			<a class="hero__link" href={withBase("/my-videos")}>Ver todos los videos</a>
 		</header>
 		<figure class="hero__frame">
-			<img src={featured.hero} alt={`Fotograma destacado del video ${featured.title}`} loading="eager" />
+			<img src={withBase(featured.hero)} alt={`Fotograma destacado del video ${featured.title}`} loading="eager" />
 			<figcaption>{featured.title}</figcaption>
 		</figure>
 	</section>
@@ -26,7 +29,7 @@ const [featured, ...recent] = videos;
 		<div class="latest__grid">
 			{recent.map((video) => (
 				<article class="latest-card" id={`card-${video.slug}`}>
-					<img src={video.preview} alt={`Fotograma del video ${video.title}`} loading="lazy" />
+					<img src={withBase(video.preview)} alt={`Fotograma del video ${video.title}`} loading="lazy" />
 					<div class="latest-card__meta">
 						<h3>{video.title}</h3>
 						<p>{video.description}</p>
@@ -43,7 +46,7 @@ const [featured, ...recent] = videos;
 				Explora el archivo completo de piezas cortas, diarios de ruta y retratos de los lugares que marcaron
 				nuestras aventuras colectivas.
 			</p>
-			<a class="cta__button" href="/my-videos">Entrar al archivo</a>
+			<a class="cta__button" href={withBase("/my-videos")}>Entrar al archivo</a>
 		</div>
 	</section>
 

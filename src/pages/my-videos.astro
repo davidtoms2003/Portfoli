@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { videos } from "../data/videos.mjs";
+const base: string = import.meta.env.BASE_URL || "/";
+const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 ---
 
 <BaseLayout title="My Videos" description="Archivo de viajes filmados con estética cinematográfica.">
@@ -18,7 +20,7 @@ import { videos } from "../data/videos.mjs";
 				{videos.map((video, index) => (
 					<img
 						class="catalog__backdrop-image"
-						src={video.backdrop ?? video.hero}
+						src={withBase(video.backdrop ?? video.hero)}
 						alt={`Fotograma del video ${video.title}`}
 						loading="lazy"
 						data-video-bg

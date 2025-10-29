@@ -1,10 +1,12 @@
 ---
 const { title = "", description = "" } = Astro.props;
 const pageTitle = title ? `${title} | Film Diary` : "Film Diary";
+const base: string = import.meta.env.BASE_URL || "/";
+const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 const navLinks = [
-	{ href: "/", label: "Home" },
-	{ href: "/my-videos", label: "My Videos" },
-	{ href: "/about", label: "About Me" },
+	{ href: withBase("/"), label: "Home" },
+	{ href: withBase("/my-videos"), label: "My Videos" },
+	{ href: withBase("/about"), label: "About Me" },
 ];
 ---
 
@@ -15,7 +17,7 @@ const navLinks = [
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description || "Portfolio de filmmaker con viajes y diarios visuales."} />
 		<title>{pageTitle}</title>
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
 		<style>
 			:root {
 				color-scheme: dark;
@@ -248,7 +250,7 @@ const navLinks = [
 							<a
 								class="nav-link"
 								href={link.href}
-								aria-current={Astro.url.pathname === link.href ? "page" : undefined}
+								aria-current={Astro.url.pathname === new URL(link.href, base).pathname ? "page" : undefined}
 							>
 								{link.label}
 							</a>
@@ -263,7 +265,7 @@ const navLinks = [
 		<main>
 			<nav class="mobile-nav" aria-label="Navegación principal">
 				{navLinks.map((link) => (
-					<a href={link.href} aria-current={Astro.url.pathname === link.href ? "page" : undefined}>
+					<a href={link.href} aria-current={Astro.url.pathname === new URL(link.href, base).pathname ? "page" : undefined}>
 						{link.label}
 					</a>
 				))}
