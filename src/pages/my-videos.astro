@@ -471,6 +471,7 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 		const messageBody = player?.querySelector("[data-video-message-body]");
 		let iframe;
 		let lastTrigger = null;
+		let primedIndex = null;
 		const restoreFocus = () => lastTrigger?.focus?.({ preventScroll: true });
 
 		const isPlayerOpen = () => board?.classList.contains("catalog--player-open");
@@ -555,6 +556,7 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 			if (!player || !board) return;
 			player.classList.remove("is-visible");
 			board.classList.remove("catalog--player-open");
+			primedIndex = null;
 			if (iframe) {
 				iframe.src = "about:blank";
 			}
@@ -572,6 +574,7 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 		const clearActive = () => {
 			if (isPlayerOpen()) return;
 			board?.classList.remove("catalog--focused");
+			primedIndex = null;
 			items?.forEach((item) => item.classList.remove("is-active"));
 			backgrounds?.forEach((bg) => bg.classList.remove("is-active"));
 		};
@@ -588,18 +591,22 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 
 		triggers?.forEach((trigger) => {
 			const index = trigger.dataset.index;
-			trigger.addEventListener("pointerenter", () => activateIndex(index));
-			trigger.addEventListener("focus", () => activateIndex(index));
+			if (!isTouchLike()) {
+				trigger.addEventListener("pointerenter", () => activateIndex(index));
+				trigger.addEventListener("focus", () => activateIndex(index));
+			}
 			trigger.addEventListener("click", (event) => {
 				event.preventDefault();
 				const item = board?.querySelector(`[data-video-item][data-index="${index}"]`);
-				const alreadyActive = item?.classList.contains("is-active");
-				activateIndex(index);
-				if (isMobile() && !alreadyActive) {
-					// On mobile, first tap only activates/reveals info and backdrop
-					item?.scrollIntoView({ block: "center", behavior: "smooth" });
-					return;
+				if (isMobile()) {
+					if (primedIndex !== index) {
+						activateIndex(index);
+						primedIndex = index;
+						item?.scrollIntoView({ block: "center", behavior: "smooth" });
+						return;
+					}
 				}
+				primedIndex = null;
 				openPlayer(trigger);
 			});
 		});
@@ -612,7 +619,10 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 			}
 		});
 
-		list?.addEventListener("pointerleave", clearActive);
+		// Avoid clearing active state on touch when finger leaves element
+		if (!isTouchLike()) {
+			list?.addEventListener("pointerleave", clearActive);
+		}
 		list?.addEventListener("focusout", (event) => {
 			if (!list.contains(event.relatedTarget)) {
 				clearActive();

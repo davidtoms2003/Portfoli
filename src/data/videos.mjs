@@ -46,7 +46,7 @@ export const videos = [
     slug: "hong-kong",
     title: "Hong Kong",
     description:
-      "A wistful ode to Kowloon nights—when the trains fall silent, memory keeps the city humming.",
+      "A wistful ode to Kowloon nights—when the trains fall silent, memory keeps the city alive.",
     hero: "/thumbnails/HONGKONG1.jpg",
     preview: "/thumbnails/HONGKONG2.jpg",
     backdrop: "/thumbnails/HONGKONG1.jpg",
