@@ -475,7 +475,10 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 
 		const isPlayerOpen = () => board?.classList.contains("catalog--player-open");
 
-		const isMobile = () => window.matchMedia("(max-width: 960px)").matches;
+		const isTouchLike = () =>
+			window.matchMedia("(hover: none)").matches ||
+			window.matchMedia("(pointer: coarse)").matches;
+		const isMobile = () => isTouchLike() || window.matchMedia("(max-width: 960px)").matches;
 
 		const ensureIframe = () => {
 			if (!playerFrame) return null;
