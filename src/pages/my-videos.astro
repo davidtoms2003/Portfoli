@@ -394,10 +394,13 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 			}
 
 			.catalog__player {
-				top: clamp(1.2rem, 6vw, 2.2rem);
-				left: clamp(1.2rem, 6vw, 2.2rem);
-				right: clamp(1.2rem, 6vw, 2.2rem);
-				bottom: clamp(1.2rem, 6vw, 2.2rem);
+				position: fixed;
+				inset: calc(env(safe-area-inset-top, 0px) + 12px)
+					clamp(12px, 6vw, 18px)
+					calc(env(safe-area-inset-bottom, 0px) + 12px)
+					clamp(12px, 6vw, 18px);
+				transform: none; /* override desktop centering */
+				max-height: none;
 			}
 
 			.catalog__player-frame {
@@ -418,7 +421,12 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 			}
 
 			.catalog__player {
-				inset: clamp(1rem, 6vw, 1.4rem);
+				position: fixed;
+				inset: calc(env(safe-area-inset-top, 0px) + 10px)
+					clamp(10px, 6vw, 16px)
+					calc(env(safe-area-inset-bottom, 0px) + 10px)
+					clamp(10px, 6vw, 16px);
+				transform: none;
 			}
 
 			.catalog__list {
@@ -434,6 +442,12 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 
 			.catalog__description {
 				display: none;
+			}
+
+			/* On small screens, reveal description on first tap (active state) */
+			.catalog__item.is-active .catalog__description {
+				display: block;
+				opacity: 1;
 			}
 
 			.catalog__hint {
@@ -460,6 +474,8 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 		const restoreFocus = () => lastTrigger?.focus?.({ preventScroll: true });
 
 		const isPlayerOpen = () => board?.classList.contains("catalog--player-open");
+
+		const isMobile = () => window.matchMedia("(max-width: 960px)").matches;
 
 		const ensureIframe = () => {
 			if (!playerFrame) return null;
@@ -573,7 +589,14 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 			trigger.addEventListener("focus", () => activateIndex(index));
 			trigger.addEventListener("click", (event) => {
 				event.preventDefault();
+				const item = board?.querySelector(`[data-video-item][data-index="${index}"]`);
+				const alreadyActive = item?.classList.contains("is-active");
 				activateIndex(index);
+				if (isMobile() && !alreadyActive) {
+					// On mobile, first tap only activates/reveals info and backdrop
+					item?.scrollIntoView({ block: "center", behavior: "smooth" });
+					return;
+				}
 				openPlayer(trigger);
 			});
 		});
