@@ -9,7 +9,12 @@ const inputDirs = [
 ];
 
 // Remove high-res suffixed variants we no longer want to keep
-const patterns = [/\.w2160\.webp$/i, /\.w3840\.webp$/i];
+// and any erroneously double-suffixed variants like .w1080.w720.webp
+const patterns = [
+  /\.w2160\.webp$/i,
+  /\.w3840\.webp$/i,
+  /\.w\d+\.w\d+\.webp$/i,
+];
 
 async function cleanDir(dir) {
   let removed = 0; let skipped = 0; let missing = 0;
