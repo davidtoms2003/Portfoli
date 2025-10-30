@@ -9,7 +9,8 @@
     "astro": "astro",
     "images:webp": "node scripts/convert-gallery-to-webp.mjs",
     "gallery:webp": "node scripts/convert-gallery-to-webp.mjs",
-    "images:clean": "node scripts/remove-originals.mjs"
+    "images:clean": "node scripts/remove-originals.mjs",
+    "images:clean:large": "node scripts/remove-large-variants.mjs"
   },
   "dependencies": {
     "astro": "^5.14.7"

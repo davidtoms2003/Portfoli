@@ -1,8 +1,52 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { frames } from "../data/gallery.mjs";
+// Build-time helpers to compute intrinsic image sizes to prevent layout shift
+import sharp from "sharp";
+import { fileURLToPath } from "node:url";
+
 const base: string = import.meta.env.BASE_URL || "/";
 const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
+
+// Resolve a file inside /public for build-time processing
+const publicFileUrl = (publicPath: string) => new URL(`../../public${publicPath.replace(/^\//, "/")}`, import.meta.url);
+
+// Compute width/height from the source image (WebP) at build time
+const getMeta = async (src: string) => {
+  try {
+    const url = publicFileUrl(src);
+    const meta = await sharp(fileURLToPath(url)).metadata();
+    if (meta.width && meta.height) return { width: meta.width, height: meta.height };
+  } catch (e) {
+    // ignore; will fallback below
+  }
+  // Fallback ratio if metadata is unavailable
+  return { width: 1600, height: 900 };
+};
+
+// Precompute render items with srcset and intrinsic sizes
+const widths = [480, 720, 1080, 1440];
+const sizes = "(min-width: 1600px) 20vw, (min-width: 1200px) 24vw, (min-width: 900px) 30vw, (min-width: 640px) 44vw, 94vw";
+const items = await Promise.all(
+  frames.map(async (f, i) => {
+    const baseWebp = f.src.replace(/\.(jpe?g|png)$/i, ".webp");
+    const { width, height } = await getMeta(baseWebp);
+    const webpSrcset = widths
+      .filter((w) => w <= width)
+      .map((w) => `${withBase(baseWebp.replace(/\.webp$/, `.w${w}.webp`))} ${w}w`)
+      .join(", ");
+    return {
+      index: i,
+      alt: f.alt || `Frame ${i + 1}`,
+      baseWebp,
+      width,
+      height,
+      webpSrcset,
+      sizes,
+      credit: f.credit || "",
+    };
+  })
+);
 ---
 
 <BaseLayout title="Gallery" description="Collection of frames and stills taken from the videos.">
@@ -16,29 +60,22 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
     </header>
 
     <ul class="gallery__grid" data-gallery>
-      {frames.map((f, i) => (
-        <li class="gallery__item" data-index={i}>
-          <figure class="frame" role="button" tabindex="0" aria-label={`Open image ${i + 1}`}>
-            {(() => {
-              const baseWebp = f.src.replace(/\.(jpe?g|png)$/i, ".webp");
-              const widths = [480, 720, 1080, 1440];
-              const webpSrcset = widths.map(w => `${withBase(baseWebp.replace(/\.webp$/, `.w${w}.webp`))} ${w}w`).join(", ");
-              const sizes = "(min-width: 1600px) 20vw, (min-width: 1200px) 24vw, (min-width: 900px) 30vw, (min-width: 640px) 44vw, 94vw";
-              const imgAlt = f.alt || `Frame ${i + 1}`;
-              return (
-                <picture>
-                  <source type="image/webp" srcset={webpSrcset} sizes={sizes} />
-                  <img
-                    src={withBase(baseWebp)}
-                    alt={imgAlt}
-                    loading="lazy"
-                    decoding="async"
-                    sizes={sizes}
-                  />
-                </picture>
-              );
-            })()}
-            {f.alt && <figcaption class="frame__caption">{f.alt}{f.credit ? ` — ${f.credit}` : ""}</figcaption>}
+      {items.map((it) => (
+        <li class="gallery__item" data-index={it.index}>
+          <figure class="frame is-loading" role="button" tabindex="0" aria-label={`Open image ${it.index + 1}`} style={`aspect-ratio: ${it.width} / ${it.height}` }>
+            <picture>
+              <source type="image/webp" srcset={it.webpSrcset} sizes={it.sizes} />
+              <img
+                src={withBase(it.baseWebp)}
+                alt={it.alt}
+                loading="lazy"
+                decoding="async"
+                sizes={it.sizes}
+                width={it.width}
+                height={it.height}
+              />
+            </picture>
+            {it.alt && <figcaption class="frame__caption">{it.alt}{it.credit ? ` — ${it.credit}` : ""}</figcaption>}
           </figure>
         </li>
       ))}
@@ -142,6 +179,24 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 
     .frame:hover { box-shadow: 0 22px 54px rgba(0,0,0,0.44); }
 
+    /* Skeleton shimmer to avoid perceived jank */
+    .frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 20%, rgba(255,255,255,0.08) 40%)
+        0 0 / 240% 100% no-repeat,
+        rgba(255,255,255,0.04);
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+    .frame.is-loading::before { opacity: 1; animation: shimmer 1.4s infinite linear; }
+    @keyframes shimmer {
+      0% { background-position: -200% 0, 0 0; }
+      100% { background-position: 200% 0, 0 0; }
+    }
+
     /* Spotlight overlay outside images */
     .gallery__spotlight {
       position: fixed;
@@ -165,7 +220,10 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
       height: auto; /* keep natural aspect ratio */
       object-fit: cover; /* safe fallback */
       filter: saturate(0.98) contrast(1.02);
+      opacity: 0;
+      transition: opacity 240ms ease-out, filter 240ms ease-out;
     }
+    .frame img.is-loaded { opacity: 1; }
 
     .frame__caption {
       position: absolute;
@@ -287,9 +345,25 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
       current = (index + images.length) % images.length;
       const img = images[current];
       const chosen = img.currentSrc || img.src;
-      // Prefer the full-size WebP when available: replace any sized variant like .w720.webp -> .webp
-      const full = chosen.replace(/\.w\d+\.webp$/i, '.webp');
-      imgEl.src = full;
+      // Base full-size webp URL
+      const baseUrl = chosen.replace(/\.w\d+\.webp$/i, '.webp');
+      const naturalW = parseInt(img.getAttribute('width') || '0', 10) || 0;
+      // Build high-res srcset limited to existing downscaled variants we keep
+      const hiWidths = [1440];
+      const candidates = [];
+      for (const w of hiWidths) {
+        if (naturalW >= w) candidates.push(`${baseUrl.replace(/\.webp$/i, `.w${w}.webp`)} ${w}w`);
+      }
+      // Always include the original master as the largest candidate
+      if (naturalW > 0) candidates.push(`${baseUrl} ${naturalW}w`);
+
+      imgEl.removeAttribute('srcset');
+      imgEl.removeAttribute('sizes');
+      if (candidates.length) {
+        imgEl.srcset = candidates.join(', ');
+        imgEl.sizes = '95vw';
+      }
+      imgEl.src = baseUrl; // fallback and immediate load
       imgEl.alt = img.alt || '';
       captionEl.textContent = img.alt || '';
       lightbox.classList.add('is-open');
@@ -369,5 +443,19 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
     };
     window.addEventListener('scroll', updateHole);
     window.addEventListener('resize', updateHole);
+
+    // Mark images as loaded to fade-in and hide skeletons; also handle cached images
+    const markLoaded = (img) => {
+      const fig = img.closest('.frame');
+      fig?.classList.remove('is-loading');
+      img.classList.add('is-loaded');
+    };
+    images.forEach((img) => {
+      if (img.complete && img.naturalWidth > 0) {
+        markLoaded(img);
+      } else {
+        img.addEventListener('load', () => markLoaded(img), { once: true });
+      }
+    });
   </script>
 </BaseLayout>

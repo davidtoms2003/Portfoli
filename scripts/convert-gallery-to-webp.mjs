@@ -11,6 +11,9 @@ const inputDirs = [
 ];
 
 const exts = new Set(['.jpg', '.jpeg', '.png']);
+// Responsive widths for downscaled variants only. The original (no suffix)
+// remains the full-resolution master (e.g., 4K). Do NOT generate 2K/4K
+// suffixed variants to avoid duplicating the master.
 const widths = [480, 720, 1080, 1440];
 
 async function ensureDir(p) {
@@ -33,7 +36,8 @@ async function convertFile(filePath) {
   const inMeta = await sharp(filePath).metadata().catch(() => ({}));
   const maxWidth = inMeta?.width || Infinity;
   for (const w of widths) {
-    const target = Math.min(w, maxWidth);
+    if (w > maxWidth) continue; // skip variants larger than the source
+    const target = w;
     const variantPath = outPath.replace(/\.webp$/i, `.w${w}.webp`);
     try {
       const [inS, outS] = await Promise.allSettled([stat(filePath), stat(variantPath)]);
