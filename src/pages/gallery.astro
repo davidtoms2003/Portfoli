@@ -1,0 +1,369 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { frames } from "../data/gallery.mjs";
+const base: string = import.meta.env.BASE_URL || "/";
+const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
+---
+
+<BaseLayout title="Gallery" description="Collection of frames and stills taken from the videos.">
+  <section class="gallery" aria-labelledby="gallery-heading">
+    <header class="gallery__header">
+      <p class="eyebrow">Frames</p>
+      <h1 id="gallery-heading">Gallery</h1>
+      <p>
+        Selected frames from the videos. Click any image to view it larger.
+      </p>
+    </header>
+
+    <ul class="gallery__grid" data-gallery>
+      {frames.map((f, i) => (
+        <li class="gallery__item" data-index={i}>
+          <figure class="frame" role="button" tabindex="0" aria-label={`Open image ${i + 1}`}>
+            {(() => {
+              const baseWebp = f.src.replace(/\.(jpe?g|png)$/i, ".webp");
+              const widths = [480, 720, 1080, 1440];
+              const webpSrcset = widths.map(w => `${withBase(baseWebp.replace(/\.webp$/, `.w${w}.webp`))} ${w}w`).join(", ");
+              const sizes = "(min-width: 1600px) 20vw, (min-width: 1200px) 24vw, (min-width: 900px) 30vw, (min-width: 640px) 44vw, 94vw";
+              const imgAlt = f.alt || `Frame ${i + 1}`;
+              return (
+                <picture>
+                  <source type="image/webp" srcset={webpSrcset} sizes={sizes} />
+                  <img
+                    src={withBase(f.src)}
+                    alt={imgAlt}
+                    loading="lazy"
+                    decoding="async"
+                    sizes={sizes}
+                  />
+                </picture>
+              );
+            })()}
+            {f.alt && <figcaption class="frame__caption">{f.alt}{f.credit ? ` — ${f.credit}` : ""}</figcaption>}
+          </figure>
+        </li>
+      ))}
+    </ul>
+
+    <div class="gallery__spotlight" data-spotlight aria-hidden="true">
+      <svg class="gallery__spotlight-svg" data-spotlight-svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+        <defs>
+          <mask id="spotMask" maskUnits="userSpaceOnUse">
+            <rect x="0" y="0" width="100%" height="100%" fill="white" />
+            <rect data-spotlight-hole x="0" y="0" width="0" height="0" rx="16" ry="16" fill="black" />
+          </mask>
+          <filter id="filmGrain" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3" stitchTiles="stitch">
+              <animate attributeName="seed" from="0" to="100" dur="2.8s" repeatCount="indefinite" />
+            </feTurbulence>
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+          <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+            <stop offset="60%" stop-color="#000" stop-opacity="0" />
+            <stop offset="100%" stop-color="#000" stop-opacity="0.25" />
+          </radialGradient>
+        </defs>
+        <g mask="url(#spotMask)">
+          <rect x="0" y="0" width="100%" height="100%" fill="#000" opacity="0.55" />
+          <rect x="0" y="0" width="100%" height="100%" fill="url(#vignette)" />
+          <rect x="0" y="0" width="100%" height="100%" filter="url(#filmGrain)" opacity="0.18" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="lightbox" data-lightbox aria-hidden="true">
+      <button class="lightbox__close" type="button" aria-label="Close">✕</button>
+      <button class="lightbox__nav lightbox__prev" type="button" aria-label="Previous">‹</button>
+      <button class="lightbox__nav lightbox__next" type="button" aria-label="Next">›</button>
+      <img class="lightbox__img" alt="" />
+      <div class="lightbox__caption" data-caption></div>
+    </div>
+  </section>
+
+  <style>
+    .gallery {
+      display: grid;
+      gap: clamp(2rem, 5vw, 3rem);
+    }
+
+    .gallery__header {
+      display: grid;
+      gap: 1rem;
+      max-width: 44rem;
+    }
+
+    .gallery__header h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    /* Masonry-style layout using CSS columns */
+    .gallery__grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      column-gap: clamp(0.8rem, 2vw, 1.2rem);
+      /* default column count adjusts with width */
+      columns: 1 320px; /* min column width ~320px */
+    }
+
+    @media (min-width: 640px) {
+      .gallery__grid { columns: 2 320px; }
+    }
+    @media (min-width: 900px) {
+      .gallery__grid { columns: 3 320px; }
+    }
+    @media (min-width: 1200px) {
+      .gallery__grid { columns: 4 320px; }
+    }
+    @media (min-width: 1600px) {
+      .gallery__grid { columns: 5 340px; }
+    }
+
+    .gallery__item {
+      display: inline-block;
+      width: 100%;
+      margin: 0 0 clamp(0.8rem, 2vw, 1.2rem);
+      break-inside: avoid;
+    }
+
+    .frame {
+      margin: 0;
+      position: relative;
+      border-radius: clamp(12px, 2vw, 16px);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.32);
+      transition: box-shadow 260ms ease, filter 260ms ease;
+      cursor: pointer; /* remove magnifying glass */
+    }
+
+    .frame:hover { box-shadow: 0 22px 54px rgba(0,0,0,0.44); }
+
+    /* Spotlight overlay outside images */
+    .gallery__spotlight {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998; /* below lightbox (9999), above content */
+      opacity: 0;
+      transition: opacity 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      background: transparent;
+    }
+    .gallery__spotlight[data-on="true"] { opacity: 1; }
+    .gallery__spotlight-svg { display: block; width: 100%; height: 100%; }
+
+    .frame img {
+      display: block;
+      width: 100%;
+      height: auto; /* keep natural aspect ratio */
+      object-fit: cover; /* safe fallback */
+      filter: saturate(0.98) contrast(1.02);
+    }
+
+    .frame__caption {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.8));
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-overlay, rgba(0,0,0,0.92));
+      display: grid;
+      place-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+      z-index: 9999;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    .lightbox.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .lightbox__img {
+      max-width: 95vw;
+      max-height: 90vh;
+      width: auto;
+      height: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border-radius: clamp(8px, 1.5vw, 12px);
+    }
+    .lightbox__caption {
+      position: fixed;
+      left: 50%;
+      bottom: max(12px, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      color: #ddd;
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+      background: rgba(0,0,0,0.46);
+      border-radius: 8px;
+      max-width: min(90vw, 60ch);
+      text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .lightbox__close {
+      position: fixed;
+      top: max(12px, env(safe-area-inset-top));
+      right: max(12px, env(safe-area-inset-right));
+      font-size: 18px;
+      line-height: 1;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      background: linear-gradient(120deg, rgba(17,17,17,0.92), rgba(7,7,7,0.82));
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 18px 36px rgba(0,0,0,0.45);
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+    .lightbox__close:hover,
+    .lightbox__close:focus-visible {
+      transform: translateY(-1px);
+      background: linear-gradient(120deg, rgba(24,24,24,0.96), rgba(10,10,10,0.88));
+      box-shadow: 0 24px 48px rgba(0,0,0,0.55);
+    }
+    .lightbox__nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 10px 14px;
+      font-size: 24px;
+      line-height: 1;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      background: linear-gradient(120deg, rgba(17,17,17,0.92), rgba(7,7,7,0.82));
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 18px 36px rgba(0,0,0,0.45);
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+      user-select: none;
+    }
+    .lightbox__nav:hover,
+    .lightbox__nav:focus-visible {
+      transform: translateY(calc(-50% - 1px));
+      background: linear-gradient(120deg, rgba(24,24,24,0.96), rgba(10,10,10,0.88));
+      box-shadow: 0 24px 48px rgba(0,0,0,0.55);
+    }
+    .lightbox__prev { left: max(12px, env(safe-area-inset-left)); }
+    .lightbox__next { right: max(12px, env(safe-area-inset-right)); }
+  </style>
+
+  <script type="module">
+  const gallery = document.querySelector('[data-gallery]');
+    const items = Array.from(document.querySelectorAll('.gallery__item'));
+    const images = Array.from(document.querySelectorAll('.frame img'));
+    const lightbox = document.querySelector('[data-lightbox]');
+    const imgEl = lightbox.querySelector('.lightbox__img');
+    const captionEl = lightbox.querySelector('[data-caption]');
+    const btnClose = lightbox.querySelector('.lightbox__close');
+    const btnPrev = lightbox.querySelector('.lightbox__prev');
+    const btnNext = lightbox.querySelector('.lightbox__next');
+  const spotlight = document.querySelector('[data-spotlight]');
+  const spotSvg = document.querySelector('[data-spotlight-svg]');
+  const spotHole = spotSvg?.querySelector('[data-spotlight-hole]');
+
+    let current = -1;
+
+    // Move lightbox to body to escape any stacking contexts from gallery
+    if (lightbox && document.body && lightbox.parentElement !== document.body) {
+      document.body.appendChild(lightbox);
+    }
+
+    function openAt(index) {
+      current = (index + images.length) % images.length;
+      const img = images[current];
+      const chosen = img.currentSrc || img.src;
+      // Prefer the full-size WebP when available: replace any sized variant like .w720.webp -> .webp
+      const full = chosen.replace(/\.w\d+\.webp$/i, '.webp');
+      imgEl.src = full;
+      imgEl.alt = img.alt || '';
+      captionEl.textContent = img.alt || '';
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.documentElement.style.overflow = 'hidden';
+    }
+    function close() {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      imgEl.src = '';
+      document.documentElement.style.overflow = '';
+      current = -1;
+    }
+    function prev() { if (current !== -1) openAt(current - 1); }
+    function next() { if (current !== -1) openAt(current + 1); }
+
+    // Open by click or Enter
+    items.forEach((li, idx) => {
+      const fig = li.querySelector('.frame');
+      fig?.addEventListener('click', () => openAt(idx));
+      fig?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openAt(idx); }
+      });
+    });
+
+    // Controls
+    btnClose.addEventListener('click', close);
+    btnPrev.addEventListener('click', prev);
+    btnNext.addEventListener('click', next);
+    lightbox.addEventListener('click', (e) => {
+      // close only when clicking the backdrop
+      if (e.target === lightbox) close();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (lightbox.classList.contains('is-open')) {
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') prev();
+        else if (e.key === 'ArrowRight') next();
+      }
+    });
+
+    // Spotlight effect outside images
+    const figures = Array.from(document.querySelectorAll('.frame'));
+    let hoverFig = null;
+    figures.forEach((fig) => {
+      fig.addEventListener('pointerenter', () => {
+        if (!spotlight || !spotHole) return;
+        hoverFig = fig;
+        const r = fig.getBoundingClientRect();
+        const br = parseFloat(getComputedStyle(fig).borderTopLeftRadius) || 16;
+        spotHole.setAttribute('x', `${r.left}`);
+        spotHole.setAttribute('y', `${r.top}`);
+        spotHole.setAttribute('width', `${r.width}`);
+        spotHole.setAttribute('height', `${r.height}`);
+        spotHole.setAttribute('rx', `${br}`);
+        spotHole.setAttribute('ry', `${br}`);
+        spotlight.dataset.on = 'true';
+      });
+      fig.addEventListener('pointerleave', () => {
+        if (!spotlight || !spotHole) return;
+        spotlight.dataset.on = 'false';
+        spotHole.setAttribute('width', '0');
+        spotHole.setAttribute('height', '0');
+        hoverFig = null;
+      });
+    });
+    const updateHole = () => {
+      if (!hoverFig || spotlight?.dataset.on !== 'true' || !spotHole) return;
+      const r = hoverFig.getBoundingClientRect();
+      const br = parseFloat(getComputedStyle(hoverFig).borderTopLeftRadius) || 16;
+      spotHole.setAttribute('x', `${r.left}`);
+      spotHole.setAttribute('y', `${r.top}`);
+      spotHole.setAttribute('width', `${r.width}`);
+      spotHole.setAttribute('height', `${r.height}`);
+      spotHole.setAttribute('rx', `${br}`);
+      spotHole.setAttribute('ry', `${br}`);
+    };
+    window.addEventListener('scroll', updateHole);
+    window.addEventListener('resize', updateHole);
+  </script>
+</BaseLayout>

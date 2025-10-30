@@ -6,9 +6,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "gallery:webp": "node scripts/convert-gallery-to-webp.mjs"
   },
   "dependencies": {
     "astro": "^5.14.7"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.3"
   }
 }
