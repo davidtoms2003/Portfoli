@@ -62,4 +62,13 @@ export const videos = [
   backdrop: "/thumbnails/SOLEDAT3.webp",
     videoUrl: "https://www.youtube.com/embed/LuJHgIjcfIg?si=ZJPKfxInpmi-mShd",
   },
+  {
+    slug: "colors",
+    title: "COLORS",
+    description:
+      "Testing the limits of color grading by combining different clips with a striking depth.",
+    hero: "/thumbnails/COLORS2.webp",
+    preview: "/thumbnails/COLORS2.webp",
+    backdrop: "/thumbnails/COLORS2.webp",
+  },
 ];

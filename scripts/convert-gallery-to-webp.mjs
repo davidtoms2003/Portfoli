@@ -44,18 +44,48 @@ async function convertFile(filePath) {
   return { converted: true, outPath };
 }
 
-async function run() {
-  for (const dir of inputDirs) {
-    const entries = await readdir(dir, { withFileTypes: true }).catch(() => []);
-    let converted = 0; let skipped = 0;
-    for (const e of entries) {
-      if (!e.isFile()) continue;
-      const full = path.join(dir, e.name);
-      const res = await convertFile(full);
-      if (res?.converted) converted++; else skipped++;
-    }
-    console.log(`${path.basename(dir)} WebP: converted ${converted}, skipped ${skipped}`);
+async function processDir(dir) {
+  const entries = await readdir(dir, { withFileTypes: true }).catch(() => []);
+  let converted = 0; let skipped = 0;
+  for (const e of entries) {
+    if (!e.isFile()) continue;
+    const full = path.join(dir, e.name);
+    const res = await convertFile(full);
+    if (res?.converted) converted++; else skipped++;
   }
+  console.log(`${path.basename(dir)} WebP: converted ${converted}, skipped ${skipped}`);
+}
+
+async function run() {
+  const args = process.argv.slice(2);
+  if (args.length > 0) {
+    let converted = 0; let skipped = 0; let missing = 0;
+    for (const raw of args) {
+      const p = path.isAbsolute(raw) ? raw : path.join(root, raw);
+      try {
+        const s = await stat(p);
+        if (s.isDirectory()) {
+          await processDir(p);
+          continue;
+        }
+        if (s.isFile()) {
+          const res = await convertFile(p);
+          if (res?.converted) converted++; else skipped++;
+          continue;
+        }
+        skipped++;
+      } catch {
+        console.warn(`Not found or inaccessible: ${raw}`);
+        missing++;
+      }
+    }
+    if (converted + skipped + missing > 0) {
+      console.log(`Selective WebP: converted ${converted}, skipped ${skipped}, missing ${missing}`);
+    }
+    return;
+  }
+  // Default: process both folders
+  for (const dir of inputDirs) await processDir(dir);
 }
 
 run().catch((err) => {

@@ -18,6 +18,9 @@ Deployed to GitHub Pages. The `astro.config.mjs` file sets the `site` and `base`
 - `npm run build` – Build static site to `dist/`
 - `npm run preview` – Preview the built site locally
 - `npm run images:webp` – Convert images in `public/gallery` and `public/thumbnails` to WebP and generate responsive variants
+	- Selective mode: append paths to files or a folder to convert only those
+		- Example (single file): `npm run images:webp -- public/thumbnails/MI_FOTO.jpg`
+		- Example (folder): `npm run images:webp -- public/thumbnails`
 - `npm run images:clean` – Remove original JPG/JPEG/PNG from those folders
 
 ## How to run
