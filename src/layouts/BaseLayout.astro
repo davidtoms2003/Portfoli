@@ -213,22 +213,30 @@ const navLinks = [
 				}
 
 				.mobile-nav {
-					display: flex;
-					gap: 1rem;
+					display: grid;
+					grid-template-columns: repeat(2, minmax(0, 1fr));
+					gap: 0.8rem;
 					margin-bottom: clamp(2rem, 5vw, 3rem);
 				}
 
 				.mobile-nav a {
-					flex: 1;
+					display: grid;
+					place-items: center;
+					width: 100%;
+					min-height: 44px;
+					box-sizing: border-box;
 					text-decoration: none;
 					color: var(--text);
 					text-transform: uppercase;
 					font-size: 0.75rem;
 					letter-spacing: 0.28em;
-					padding: 0.85rem 1rem;
+					padding: 0.6rem 0.9rem;
 					border: 1px solid rgba(255, 255, 255, 0.08);
 					border-radius: 30px;
 					text-align: center;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
 				}
 			}
 		</style>

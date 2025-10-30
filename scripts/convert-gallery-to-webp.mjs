@@ -5,7 +5,10 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const root = process.cwd();
-const galleryDir = path.join(root, 'public', 'gallery');
+const inputDirs = [
+  path.join(root, 'public', 'gallery'),
+  path.join(root, 'public', 'thumbnails'),
+];
 
 const exts = new Set(['.jpg', '.jpeg', '.png']);
 const widths = [480, 720, 1080, 1440];
@@ -42,15 +45,17 @@ async function convertFile(filePath) {
 }
 
 async function run() {
-  const entries = await readdir(galleryDir, { withFileTypes: true });
-  let converted = 0; let skipped = 0;
-  for (const e of entries) {
-    if (!e.isFile()) continue;
-    const full = path.join(galleryDir, e.name);
-    const res = await convertFile(full);
-    if (res?.converted) converted++; else skipped++;
+  for (const dir of inputDirs) {
+    const entries = await readdir(dir, { withFileTypes: true }).catch(() => []);
+    let converted = 0; let skipped = 0;
+    for (const e of entries) {
+      if (!e.isFile()) continue;
+      const full = path.join(dir, e.name);
+      const res = await convertFile(full);
+      if (res?.converted) converted++; else skipped++;
+    }
+    console.log(`${path.basename(dir)} WebP: converted ${converted}, skipped ${skipped}`);
   }
-  console.log(`Gallery WebP: converted ${converted}, skipped ${skipped}`);
 }
 
 run().catch((err) => {

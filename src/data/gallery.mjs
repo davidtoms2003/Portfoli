@@ -1,7 +1,7 @@
 export const frames = [
-  { src: "/gallery/Still 2025-10-11 020237_1.10.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.118.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.176.1.jpg", alt: "", credit: "" },
+  { src: "/gallery/Still 2025-10-11 020237_1.10.1.webp", alt: "", credit: "" },
+  { src: "/gallery/Still 2025-10-11 020237_1.118.1.webp", alt: "", credit: "" },
+  { src: "/gallery/Still 2025-10-11 020237_1.176.1.webp", alt: "", credit: "" },
   { src: "/gallery/Still 2025-10-11 020237_1.176.2.jpg", alt: "", credit: "" },
   { src: "/gallery/Still 2025-10-11 020237_1.176.3.jpg", alt: "", credit: "" },
   { src: "/gallery/Still 2025-10-11 020237_1.178.1.jpg", alt: "", credit: "" },
