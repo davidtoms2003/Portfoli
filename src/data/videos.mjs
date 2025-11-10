@@ -75,9 +75,10 @@ export const videos = [
     slug: "muntanya",
     title: "MUNTANYA",
     description:
-      "Set in the heart of the Vall de Núria, this video captures a morning filled with friendship, laughter, and the beauty of the mountains. Surrounded by nature’s calm and the energy of adventure, we journey together through trails that remind us how simple moments can become unforgettable memories.",
+      "Set in the heart of the Vall de Núria, a morning filled with friendship, laughter, and the beauty of the mountains. Remind us how simple moments can become unforgettable memories.",
     hero: "/thumbnails/MUNTANYA1.webp",
-    preview: "/thumbnails/MUNTANYA2.webp",
-    backdrop: "/thumbnails/MUNTANYA1.webp",
+    preview: "/thumbnails/MUNTANYA1.webp",
+    backdrop: "/thumbnails/MUNTANYA6.webp",
+    videoUrl: "https://www.youtube.com/embed/YEn-PYwBBdM?si=-X8y7NuxDmYUHVOA",
   },
 ];
