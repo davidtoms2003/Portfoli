@@ -1,114 +1,31 @@
-export const frames = [
-  { src: "/gallery/COLORS1.webp", alt: "COLORS", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.10.1.webp", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.118.1.webp", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.176.1.webp", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.176.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.176.3.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.178.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.192.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.195.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.195.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.195.3.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.198.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.199.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.199.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.206.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.207.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.21.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.212.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.216.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.216.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.216.3.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.216.4.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.217.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.218.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.222.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.223.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.225.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.227.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.229.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.256.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.256.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.279.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.291.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.30.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_1.99.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-11 020237_2.2.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 172143_1.1.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.10.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.102.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.114.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.114.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.115.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.117.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.119.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.12.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.13.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.14.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.16.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.19.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.19.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.19.3.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.23.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.26.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.27.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.28.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.30.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.31.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.35.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.35.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.36.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.38.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.38.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.41.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.41.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.44.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.45.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.47.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.50.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.52.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.53.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.55.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.56.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.56.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.57.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.58.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.59.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.61.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.63.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.64.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.65.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.66.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.67.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.68.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.70.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.71.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.72.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.74.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.77.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.77.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.78.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.79.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.79.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.79.3.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.79.4.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.79.5.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.79.6.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.80.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.80.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.80.3.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.80.4.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.82.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.83.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.84.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.85.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.86.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.87.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.88.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.89.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.89.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.9.1.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.9.2.jpg", alt: "", credit: "" },
-  { src: "/gallery/Still 2025-10-15 173024_1.98.1.jpg", alt: "", credit: "" },
-];
+// Dynamic gallery list: automatically include all .webp originals in /public/gallery
+// (excluding responsive size variants like .w720.webp). Keeps manual maintenance low.
+import { readdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+const galleryDirUrl = new URL('../../public/gallery/', import.meta.url);
+const galleryDirPath = fileURLToPath(galleryDirUrl);
+const files = await readdir(galleryDirPath).catch(() => []);
+
+const isBaseWebp = (name) => name.endsWith('.webp') && !/\.w\d+\.webp$/i.test(name);
+// Ensure COLORS1.webp stays at the top if present.
+const priority = ['COLORS1.webp'];
+const prioritySet = new Set(priority);
+
+const autos = files.filter(isBaseWebp).sort((a, b) => a.localeCompare(b, 'en')); // alphabetical
+
+const mapped = autos.map((name) => {
+  const src = `/gallery/${name}`;
+  let alt = '';
+  if (name.toLowerCase().startsWith('colors1')) alt = 'COLORS';
+  return { src, alt, credit: '' };
+});
+
+// Reorder: priority first, then rest without duplicates.
+const ordered = [
+  ...priority.filter(f => autos.includes(f)).map(f => mapped.find(m => m.src.endsWith(f))),
+  ...mapped.filter(m => !prioritySet.has(path.basename(m.src))),
+].filter(Boolean);
+
+export const frames = ordered;
