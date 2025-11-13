@@ -14,16 +14,16 @@ export const videos = [
     title: "Georgia",
     description:
       "A country with hidden gems and a cool, resilient character shaped by its Soviet-era past.",
-  hero: "/thumbnails/GEORGIA1.webp",
-  preview: "/thumbnails/GEORGIA2.webp",
+  hero: "/thumbnails/GEORGIA2.webp",
+  preview: "/thumbnails/GEORGIA1.webp",
   },
   {
     slug: "armenia",
     title: "Armenia",
     description:
       "A non-touristic journey across raw landscapes and kind people, discovered on a road trip with friends.",
-  hero: "/thumbnails/ARMENIA1.webp",
-  preview: "/thumbnails/ARMENIA2.webp",
+  hero: "/thumbnails/ARMENIA2.webp",
+  preview: "/thumbnails/ARMENIA1.webp",
   },
   {
     slug: "vilamaniscle",
@@ -49,8 +49,8 @@ export const videos = [
     description:
       "A wistful ode to Kowloon nights—when the trains fall silent, memory keeps the city alive.",
   hero: "/thumbnails/HONGKONG1.webp",
-  preview: "/thumbnails/HONGKONG2.webp",
-  backdrop: "/thumbnails/HONGKONG1.webp",
+  preview: "/thumbnails/HONGKONG1.webp",
+  backdrop: "/thumbnails/HONGKONG2.webp",
     videoUrl: "https://www.youtube.com/embed/PkxiD38a9bM?si=OWR2XLgLsUgU48xw",
   },
   {
@@ -68,8 +68,8 @@ export const videos = [
     title: "COLORS",
     description:
       "Testing the limits of color grading by combining different clips with a striking depth.",
-    hero: "/thumbnails/COLORS2.webp",
-    preview: "/thumbnails/COLORS2.webp",
+    hero: "/thumbnails/COLORS1.webp",
+    preview: "/thumbnails/COLORS1.webp",
     backdrop: "/thumbnails/COLORS2.webp",
   },
   {
