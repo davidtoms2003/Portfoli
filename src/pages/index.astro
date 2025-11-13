@@ -27,15 +27,15 @@ const [featured, ...recent] = videos;
 			<h2 id="latest-heading">Viajes que siguen latiendo</h2>
 		</header>
 		<div class="latest__grid">
-			{recent.map((video) => (
-				<article class="latest-card" id={`card-${video.slug}`}>
-					<img src={withBase(video.preview)} alt={`Fotograma del video ${video.title}`} loading="lazy" />
-					<div class="latest-card__meta">
-						<h3>{video.title}</h3>
-						<p>{video.description}</p>
-					</div>
-				</article>
-			))}
+				{recent.map((video) => (
+					<article class="latest-card" id={`card-${video.slug}`}>
+						<img src={withBase(video.preview)} alt={`Fotograma del video ${video.title}`} loading="lazy" />
+						<div class="latest-card__meta">
+							<h3 title={video.title}>{video.title}</h3>
+							<p>{video.description}</p>
+						</div>
+					</article>
+				))}
 		</div>
 	</section>
 
@@ -209,6 +209,12 @@ const [featured, ...recent] = videos;
 			letter-spacing: 0.18em;
 			text-transform: uppercase;
 			font-weight: 600;
+			/* Truncate long titles to a single line with ellipsis for a cleaner look */
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			max-width: 100%;
+			word-break: normal;
 		}
 
 		.latest-card__meta p {
@@ -216,6 +222,12 @@ const [featured, ...recent] = videos;
 			font-size: 0.95rem;
 			line-height: 1.7;
 			color: rgba(255, 255, 255, 0.78);
+			/* Allow description to wrap and clamp to 3 lines so it doesn't overflow the card */
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+			word-break: break-word;
 		}
 
 		.cta {
