@@ -30,8 +30,9 @@ export const videos = [
     title: "Vilamaniscle",
     description:
       "A tiny Catalan town wrapped in reverent quiet, where Eulalia keeps the village heartbeat steady.",
-  hero: "/thumbnails/VILAMANISCLE1.webp",
-  preview: "/thumbnails/VILAMANISCLE1.webp",
+  hero: "/thumbnails/VILAMANISCLE3.webp",
+  preview: "/thumbnails/VILAMANISCLE4.webp",
+    videoUrl: "https://www.youtube.com/embed/7ayPCrGjcOo?si=dHWBtsrXDCKzY641",
   },
   {
     slug: "pesquera",
