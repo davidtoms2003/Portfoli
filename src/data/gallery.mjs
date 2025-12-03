@@ -15,10 +15,20 @@ const prioritySet = new Set(priority);
 
 const autos = files.filter(isBaseWebp).sort((a, b) => a.localeCompare(b, 'en')); // alphabetical
 
+const formatCaption = (filename) => {
+  const base = path.basename(filename, path.extname(filename));
+  const withoutParens = base.replace(/\s*\([^)]*\)\s*/g, ' ');
+  const cleaned = withoutParens.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+  return cleaned ? cleaned.toUpperCase() : base.toUpperCase();
+};
+
 const mapped = autos.map((name) => {
   const src = `/gallery/${name}`;
-  let alt = '';
+  let alt = formatCaption(name);
   if (name.toLowerCase().startsWith('colors1')) alt = 'COLORS';
+  else if (name.includes('2025-10-11')) alt = 'BALI';
+  else if (name.includes('2025-11-10')) alt = 'VALL DE NÚRIA';
+  else if (name.includes('2025-10-15')) alt = 'ARMENIA I GEORGIA';
   return { src, alt, credit: '' };
 });
 

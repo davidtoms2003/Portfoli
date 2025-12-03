@@ -13,17 +13,20 @@ export const videos = [
     slug: "georgia",
     title: "Georgia",
     description:
-      "A country with hidden gems and a cool, resilient character shaped by its Soviet-era past.",
+      "A country of hidden gems and quiet resilience, shaped by its Soviet-era past, and a story about friendships that open like parachutes to soften even the hardest falls.",
   hero: "/thumbnails/GEORGIA2.webp",
   preview: "/thumbnails/GEORGIA1.webp",
+  backdrop: "/thumbnails/GEORGIA2.webp",
+    videoUrl: "https://www.youtube.com/embed/Yd_3tKvyP9s?si=Fbc8yznCUPOyLO4k",
   },
   {
     slug: "armenia",
     title: "Armenia",
     description:
-      "A non-touristic journey across raw landscapes and kind people, discovered on a road trip with friends.",
+      "A non-touristic journey through raw landscapes and kind people, on a road trip with friends where the line between reality and dreams becomes almost invisible.",
   hero: "/thumbnails/ARMENIA2.webp",
   preview: "/thumbnails/ARMENIA1.webp",
+  videoUrl: "https://www.youtube.com/embed/DQy952sshJQ?si=RFU9CZE7rvh95egk",
   },
   {
     slug: "vilamaniscle",
@@ -42,6 +45,7 @@ export const videos = [
   hero: "/thumbnails/PESQUERA1.webp",
   preview: "/thumbnails/PESQUERA2.webp",
   backdrop: "/thumbnails/PESQUERA1.webp",
+  videoUrl: "https://www.youtube.com/embed/ODw9rswsVFc?si=bCmjIWTmxT82XmJ6", 
   },
   {
     slug: "hong-kong",
@@ -81,5 +85,15 @@ export const videos = [
     preview: "/thumbnails/MUNTANYA1.webp",
     backdrop: "/thumbnails/MUNTANYA6.webp",
     videoUrl: "https://www.youtube.com/embed/YEn-PYwBBdM?si=-X8y7NuxDmYUHVOA",
+  },
+  {
+    slug: "timisoara",
+    title: "Timisoara",
+    description:
+      "You know you should move on, but her memories still chain you to her — to the past. It is in your hands whether to move forward or stay in the world where she existed.",
+    hero: "/thumbnails/TIMISOARA1.webp",
+    preview: "/thumbnails/TIMISOARA3.webp",
+    backdrop: "/thumbnails/TIMISOARA1.webp",
+    videoUrl: "https://www.youtube.com/embed/m6S1rZw0Be8?si=4S-Ruwir7gtijcFG",
   },
 ];

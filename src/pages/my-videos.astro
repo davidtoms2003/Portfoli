@@ -421,12 +421,22 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 			}
 
 			.catalog__player {
+				/* Make the mobile popup even shorter by increasing top/bottom inset */
 				position: fixed;
-				inset: calc(env(safe-area-inset-top, 0px) + 10px)
-					clamp(10px, 6vw, 16px)
-					calc(env(safe-area-inset-bottom, 0px) + 10px)
-					clamp(10px, 6vw, 16px);
+				inset: calc(env(safe-area-inset-top, 0px) + 36px)
+					calc(env(safe-area-inset-right, 0px) + 14px)
+					calc(env(safe-area-inset-bottom, 0px) + 36px)
+					calc(env(safe-area-inset-left, 0px) + 14px);
 				transform: none;
+				border-radius: clamp(10px, 2vw, 14px);
+				max-height: none;
+			}
+
+			/* Make the player frame fill available space inside the inset container */
+			.catalog__player-frame {
+				height: calc(100% - 120px); /* reduce used height so popup appears shorter */
+				aspect-ratio: auto;
+				max-height: none;
 			}
 
 			.catalog__list {
@@ -549,6 +559,8 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 				player.classList.add("is-visible");
 				board.classList.add("catalog--player-open");
 			});
+			// Prevent the background from scrolling while the player is open
+			document.documentElement.style.overflow = 'hidden';
 			closeButton?.focus({ preventScroll: true });
 		};
 
@@ -569,6 +581,8 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 			};
 			player.addEventListener("transitionend", handleTransitionEnd);
 			restoreFocus();
+			// Restore scrolling
+			document.documentElement.style.overflow = '';
 		};
 
 		const clearActive = () => {
