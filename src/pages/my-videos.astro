@@ -5,14 +5,13 @@ const base: string = import.meta.env.BASE_URL || "/";
 const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 ---
 
-<BaseLayout title="My Videos" description="Archivo de viajes filmados con estética cinematográfica.">
+<BaseLayout title="My Videos" description="Archive of travel films captured with a cinematic sensibility.">
 	<section class="catalog" data-video-board>
 		<header class="catalog__header">
-			<p class="eyebrow">Archivo</p>
-			<h1>Todos los videos</h1>
+			<p class="eyebrow">Archive</p>
+			<h1>All films</h1>
 			<p>
-				Hover o enfócate en cada título para visualizar el fotograma y la sinopsis. Las imágenes se expanden a
-				tamaño grande para sumergirte en el ambiente del viaje.
+				Hover or focus on each title to reveal the frame and synopsis. The imagery scales up so you can sink into the atmosphere of every trip.
 			</p>
 		</header>
 		<div class="catalog__stage" data-video-stage>
@@ -21,7 +20,7 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 					<img
 						class="catalog__backdrop-image"
 						src={withBase(video.backdrop ?? video.hero)}
-						alt={`Fotograma del video ${video.title}`}
+						alt={`Frame from the ${video.title} film`}
 						loading="lazy"
 						data-video-bg
 						data-index={index}
@@ -29,8 +28,8 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 				))}
 			</div>
 			<div class="catalog__player" data-video-player hidden>
-				<button type="button" class="catalog__player-close" data-video-close aria-label="Cerrar video">
-					Cerrar
+				<button type="button" class="catalog__player-close" data-video-close aria-label="Close video">
+					Close
 				</button>
 				<div class="catalog__player-inner">
 					<div class="catalog__player-frame" data-video-frame>
@@ -38,10 +37,9 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 					</div>
 				</div>
 				<div class="catalog__player-message" data-video-message hidden>
-					<h3 data-video-message-heading>Proyección en preparación</h3>
+					<h3 data-video-message-heading>Screening in progress</h3>
 					<p data-video-message-body>
-						Pronto podrás ver esta pieza sin salir de aquí. Mientras tanto, puedes explorar las imágenes y la
-						sinopsis.
+						You’ll be able to watch this piece here very soon. In the meantime, explore the frames and synopsis to stay in the mood of the trip.
 					</p>
 				</div>
 			</div>
@@ -537,7 +535,7 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 				} else {
 					markLoaded();
 				}
-				activeIframe.setAttribute("title", `Reproductor de ${titleText}`);
+				activeIframe.setAttribute("title", `Player for ${titleText}`);
 			} else {
 				if (iframe) {
 					iframe.src = "about:blank";
@@ -545,11 +543,11 @@ const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 				playerFrame?.setAttribute("hidden", "");
 				playerMessage?.removeAttribute("hidden");
 				if (messageHeading) {
-					messageHeading.textContent = `Próximamente: ${titleText}`;
+					messageHeading.textContent = `Coming soon: ${titleText}`;
 				}
 				if (messageBody) {
 					messageBody.textContent =
-						"Muy pronto podrás ver esta pieza directamente aquí. Mientras tanto, explora las imágenes y la sinopsis.";
+						"You will be able to watch this piece here very soon. Until then, explore the stills and synopsis.";
 				}
 				playerPlaceholder?.classList.add("is-hidden");
 			}

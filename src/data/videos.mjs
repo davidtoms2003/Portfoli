@@ -1,5 +1,25 @@
 export const videos = [
   {
+    slug: "timisoara",
+    title: "Timisoara",
+    description:
+      "You know you should move on, but her memories still chain you to her — to the past. It is in your hands whether to move forward or stay in the world where she existed.",
+    hero: "/thumbnails/TIMISOARA1.webp",
+    preview: "/thumbnails/TIMISOARA3.webp",
+    backdrop: "/thumbnails/TIMISOARA1.webp",
+    videoUrl: "https://www.youtube.com/embed/m6S1rZw0Be8?si=4S-Ruwir7gtijcFG",
+  },
+  {
+    slug: "muntanya",
+    title: "MUNTANYA",
+    description:
+      "Set in the heart of the Vall de Núria, a morning filled with friendship, laughter, and the beauty of the mountains. Remind us how simple moments can become unforgettable memories.",
+    hero: "/thumbnails/MUNTANYA1.webp",
+    preview: "/thumbnails/MUNTANYA1.webp",
+    backdrop: "/thumbnails/MUNTANYA6.webp",
+    videoUrl: "https://www.youtube.com/embed/YEn-PYwBBdM?si=-X8y7NuxDmYUHVOA",
+  },
+  {
     slug: "bali",
     title: "Bali",
     description:
@@ -29,6 +49,15 @@ export const videos = [
   videoUrl: "https://www.youtube.com/embed/DQy952sshJQ?si=RFU9CZE7rvh95egk",
   },
   {
+    slug: "colors",
+    title: "COLORS",
+    description:
+      "Testing the limits of color grading by combining different clips with a striking depth.",
+    hero: "/thumbnails/COLORS1.webp",
+    preview: "/thumbnails/COLORS1.webp",
+    backdrop: "/thumbnails/COLORS2.webp",
+  },
+  {
     slug: "vilamaniscle",
     title: "Vilamaniscle",
     description:
@@ -48,16 +77,6 @@ export const videos = [
   videoUrl: "https://www.youtube.com/embed/ODw9rswsVFc?si=bCmjIWTmxT82XmJ6", 
   },
   {
-    slug: "hong-kong",
-    title: "Hong Kong",
-    description:
-      "A wistful ode to Kowloon nights—when the trains fall silent, memory keeps the city alive.",
-  hero: "/thumbnails/HONGKONG1.webp",
-  preview: "/thumbnails/HONGKONG1.webp",
-  backdrop: "/thumbnails/HONGKONG2.webp",
-    videoUrl: "https://www.youtube.com/embed/PkxiD38a9bM?si=OWR2XLgLsUgU48xw",
-  },
-  {
     slug: "soledat",
     title: "Soledat",
     description:
@@ -68,32 +87,13 @@ export const videos = [
     videoUrl: "https://www.youtube.com/embed/LuJHgIjcfIg?si=ZJPKfxInpmi-mShd",
   },
   {
-    slug: "colors",
-    title: "COLORS",
-    description:
-      "Testing the limits of color grading by combining different clips with a striking depth.",
-    hero: "/thumbnails/COLORS1.webp",
-    preview: "/thumbnails/COLORS1.webp",
-    backdrop: "/thumbnails/COLORS2.webp",
-  },
-  {
-    slug: "muntanya",
-    title: "MUNTANYA",
-    description:
-      "Set in the heart of the Vall de Núria, a morning filled with friendship, laughter, and the beauty of the mountains. Remind us how simple moments can become unforgettable memories.",
-    hero: "/thumbnails/MUNTANYA1.webp",
-    preview: "/thumbnails/MUNTANYA1.webp",
-    backdrop: "/thumbnails/MUNTANYA6.webp",
-    videoUrl: "https://www.youtube.com/embed/YEn-PYwBBdM?si=-X8y7NuxDmYUHVOA",
-  },
-  {
-    slug: "timisoara",
-    title: "Timisoara",
-    description:
-      "You know you should move on, but her memories still chain you to her — to the past. It is in your hands whether to move forward or stay in the world where she existed.",
-    hero: "/thumbnails/TIMISOARA1.webp",
-    preview: "/thumbnails/TIMISOARA3.webp",
-    backdrop: "/thumbnails/TIMISOARA1.webp",
-    videoUrl: "https://www.youtube.com/embed/m6S1rZw0Be8?si=4S-Ruwir7gtijcFG",
+  slug: "hong-kong",
+  title: "Hong Kong",
+  description:
+    "A wistful ode to Kowloon nights—when the trains fall silent, memory keeps the city alive.",
+hero: "/thumbnails/HONGKONG1.webp",
+preview: "/thumbnails/HONGKONG1.webp",
+backdrop: "/thumbnails/HONGKONG2.webp",
+  videoUrl: "https://www.youtube.com/embed/PkxiD38a9bM?si=OWR2XLgLsUgU48xw",
   },
 ];

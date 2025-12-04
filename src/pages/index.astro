@@ -6,47 +6,82 @@ const base: string = import.meta.env.BASE_URL || "/";
 const withBase = (p: string) => `${base}${p.replace(/^\//, "")}`;
 
 const [featured, ...recent] = videos;
+const cards = [featured, ...recent];
 ---
 <BaseLayout title="Home">
 	<section class="hero" aria-labelledby="home-heading">
 		<header class="hero__header">
-			<p class="eyebrow">Último estreno</p>
+			<p class="eyebrow">Latest release</p>
 			<h1 id="home-heading">{featured.title}</h1>
 			<p class="lede">{featured.description}</p>
-			<a class="hero__link" href={withBase("/my-videos")}>Ver todos los videos</a>
+			<a class="hero__link" href={withBase("/my-videos")}>View all films</a>
 		</header>
 		<figure class="hero__frame">
-			<img src={withBase(featured.hero)} alt={`Fotograma destacado del video ${featured.title}`} loading="eager" />
+			<img src={withBase(featured.hero)} alt={`Featured frame from the ${featured.title} film`} loading="eager" />
 			<figcaption>{featured.title}</figcaption>
 		</figure>
 	</section>
 
 	<section class="latest" aria-labelledby="latest-heading">
 		<header class="latest__header">
-			<p class="eyebrow">Recientes</p>
-			<h2 id="latest-heading">Viajes que siguen latiendo</h2>
+			<p class="eyebrow">Recent</p>
+			<h2 id="latest-heading">Journeys full of feelings</h2>
 		</header>
 		<div class="latest__grid">
-				{recent.map((video) => (
-					<article class="latest-card" id={`card-${video.slug}`}>
-						<img src={withBase(video.preview)} alt={`Fotograma del video ${video.title}`} loading="lazy" />
-						<div class="latest-card__meta">
-							<h3 title={video.title}>{video.title}</h3>
-							<p>{video.description}</p>
-						</div>
-					</article>
-				))}
+			{cards.map((video) => (
+				<article
+					class="latest-card"
+					id={`card-${video.slug}`}
+					data-latest-card
+					data-title={video.title}
+					data-description={video.description}
+					data-image={withBase(video.preview)}
+					data-hero={withBase(video.hero)}
+					data-link={withBase(`/my-videos#${video.slug}`)}
+					data-video-url={video.videoUrl || ""}
+					role="button"
+					tabindex="0"
+				>
+					<img src={withBase(video.preview)} alt={`Frame from the ${video.title} film`} loading="lazy" />
+					<span class="latest-card__bracket latest-card__bracket--tl" aria-hidden="true"></span>
+					<span class="latest-card__bracket latest-card__bracket--br" aria-hidden="true"></span>
+					<div class="latest-card__meta">
+						<h3 title={video.title}>{video.title}</h3>
+						<span class="latest-card__cta">Open spotlight</span>
+					</div>
+				</article>
+			))}
 		</div>
 	</section>
 
 	<section class="cta" aria-labelledby="cta-heading">
 		<div class="cta__inner">
-			<h2 id="cta-heading">Narrativas de viaje con corazón cinematográfico</h2>
+			<h2 id="cta-heading">Travel narratives with a cinematic heart</h2>
 			<p>
-				Explora el archivo completo de piezas cortas, diarios de ruta y retratos de los lugares que marcaron
-				nuestras aventuras colectivas.
+				Explore the full archive of short pieces, travel diaries, and portraits of the places that shaped our collective adventures.
 			</p>
-			<a class="cta__button" href={withBase("/my-videos")}>Entrar al archivo</a>
+			<a class="cta__button" href={withBase("/my-videos")}>Enter the archive</a>
+		</div>
+	</section>
+
+	<section class="latest-overlay" data-latest-overlay hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="latest-overlay-title">
+		<button class="latest-overlay__close" type="button" aria-label="Close spotlight" data-latest-close>
+			<span aria-hidden="true">Close</span>
+		</button>
+		<div class="latest-overlay__media">
+			<img data-latest-image alt="" loading="lazy" />
+			<div class="latest-overlay__scrim"></div>
+		</div>
+		<div class="latest-overlay__content">
+			<p class="eyebrow">Film spotlight</p>
+			<h3 data-latest-title id="latest-overlay-title"></h3>
+			<p data-latest-description></p>
+			<div class="latest-overlay__actions">
+				<a class="latest-overlay__link" href={withBase("/my-videos")} data-latest-archive-link>Browse archive</a>
+				<a class="latest-overlay__link latest-overlay__link--primary" data-latest-video-link target="_blank" rel="noopener noreferrer">
+					Watch story
+				</a>
+			</div>
 		</div>
 	</section>
 
@@ -166,21 +201,39 @@ const [featured, ...recent] = videos;
 			background: rgba(255, 255, 255, 0.04);
 			box-shadow: 0 22px 44px rgba(0, 0, 0, 0.34);
 			transition: transform 280ms ease, box-shadow 280ms ease;
+			cursor: pointer;
 		}
 
-		.latest-card::after {
+		.latest-card::after,
+		.latest-card::before {
 			content: "";
 			position: absolute;
 			inset: 0;
+			pointer-events: none;
+			z-index: 1;
+		}
+
+		.latest-card::after {
 			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.75));
 			opacity: 0.9;
 			transition: opacity 240ms ease;
-			pointer-events: none;
 		}
 
-		.latest-card:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 34px 70px rgba(0, 0, 0, 0.5);
+		.latest-card::before {
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			opacity: 0;
+			transition: opacity 200ms ease;
+		}
+
+		.latest-card:hover::before,
+		.latest-card:focus-visible::before {
+			opacity: 1;
+		}
+
+		.latest-card:focus-visible {
+			outline: 2px solid rgba(255, 255, 255, 0.6);
+			outline-offset: 4px;
+			transform: translateY(-4px);
 		}
 
 		.latest-card:hover::after {
@@ -201,6 +254,7 @@ const [featured, ...recent] = videos;
 			z-index: 2;
 			display: grid;
 			gap: 0.6rem;
+			pointer-events: none;
 		}
 
 		.latest-card__meta h3 {
@@ -217,17 +271,56 @@ const [featured, ...recent] = videos;
 			word-break: normal;
 		}
 
-		.latest-card__meta p {
-			margin: 0;
-			font-size: 0.95rem;
-			line-height: 1.7;
-			color: rgba(255, 255, 255, 0.78);
-			/* Allow description to wrap and clamp to 3 lines so it doesn't overflow the card */
-			overflow: hidden;
-			display: -webkit-box;
-			-webkit-line-clamp: 3;
-			-webkit-box-orient: vertical;
-			word-break: break-word;
+		.latest-card__cta {
+			font-size: 0.7rem;
+			letter-spacing: 0.32em;
+			text-transform: uppercase;
+			color: rgba(255, 255, 255, 0.85);
+			padding-top: 0.2rem;
+		}
+
+		.latest-card__bracket {
+			position: absolute;
+			width: clamp(36px, 7vw, 58px);
+			height: clamp(36px, 7vw, 58px);
+			border: 2px solid transparent;
+			opacity: 0;
+			transition: opacity 240ms ease, transform 240ms ease;
+			pointer-events: none;
+			z-index: 2;
+			filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.7));
+		}
+
+		.latest-card__bracket--tl {
+			top: clamp(0.7rem, 2vw, 1.1rem);
+			left: clamp(0.7rem, 2vw, 1.1rem);
+			border-top-color: rgba(255, 255, 255, 0.85);
+			border-left-color: rgba(255, 255, 255, 0.85);
+			transform: translate(-10px, -10px);
+		}
+
+		.latest-card__bracket--br {
+			bottom: clamp(0.7rem, 2vw, 1.1rem);
+			right: clamp(0.7rem, 2vw, 1.1rem);
+			border-bottom-color: rgba(255, 255, 255, 0.85);
+			border-right-color: rgba(255, 255, 255, 0.85);
+			transform: translate(10px, 10px);
+		}
+
+		.latest-card:hover .latest-card__bracket,
+		.latest-card:focus-visible .latest-card__bracket {
+			opacity: 1;
+			transform: translate(0, 0);
+		}
+
+		.latest-card::after + .latest-card__meta,
+		.latest-card::before + .latest-card__meta {
+			position: relative;
+		}
+
+		.latest-card::after,
+		.latest-card::before {
+			z-index: 1;
 		}
 
 		.cta {
@@ -278,6 +371,142 @@ const [featured, ...recent] = videos;
 			background: rgba(255, 255, 255, 0.2);
 		}
 
+		.latest-overlay {
+			position: fixed;
+			inset: 0;
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: clamp(2rem, 4vw, 3rem);
+			padding: clamp(1.5rem, 4vw, 4rem);
+			background: rgba(5, 5, 5, 0.78);
+			backdrop-filter: blur(18px);
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 260ms ease;
+			z-index: 120;
+			color: var(--text);
+			isolation: isolate;
+		}
+
+		.latest-overlay[data-open="true"] {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		.latest-overlay__media {
+			position: relative;
+			border-radius: clamp(18px, 4vw, 32px);
+			overflow: hidden;
+			min-height: clamp(280px, 50vh, 480px);
+			transform-origin: var(--origin-x, 50%) var(--origin-y, 50%);
+			transform: scale(0.25);
+			transition: transform 460ms cubic-bezier(0.16, 0.84, 0.44, 1);
+			box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+		}
+
+		.latest-overlay[data-open="true"] .latest-overlay__media {
+			transform: scale(1);
+		}
+
+		.latest-overlay__media img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.latest-overlay__scrim {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.85));
+		}
+
+		.latest-overlay__content {
+			display: grid;
+			gap: 1rem;
+			align-content: center;
+			max-width: 520px;
+		}
+
+		.latest-overlay__content h3 {
+			margin: 0;
+			font-size: clamp(2rem, 4vw, 3rem);
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+		}
+
+		.latest-overlay__content p {
+			margin: 0;
+			line-height: 1.9;
+			color: rgba(255, 255, 255, 0.82);
+		}
+
+		.latest-overlay__actions {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.8rem;
+		}
+
+		.latest-overlay__link {
+			text-decoration: none;
+			text-transform: uppercase;
+			letter-spacing: 0.28em;
+			font-size: 0.75rem;
+			padding: 0.85rem 1.6rem;
+			border-radius: 999px;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			color: var(--text);
+			background: rgba(255, 255, 255, 0.08);
+			transition: transform 200ms ease, background 200ms ease;
+		}
+
+		.latest-overlay__link--primary {
+			background: var(--text);
+			color: #050505;
+		}
+
+		.latest-overlay__link:hover,
+		.latest-overlay__link:focus-visible {
+			transform: translateY(-1px);
+			background: rgba(255, 255, 255, 0.16);
+		}
+
+		.latest-overlay__link--primary:hover,
+		.latest-overlay__link--primary:focus-visible {
+			background: rgba(247, 245, 239, 0.85);
+		}
+
+		.latest-overlay__close {
+			position: absolute;
+			top: clamp(1rem, 2vw, 2rem);
+			right: clamp(1rem, 2vw, 2rem);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			background: rgba(0, 0, 0, 0.4);
+			color: var(--text);
+			text-transform: uppercase;
+			letter-spacing: 0.3em;
+			padding: 0.65rem 1.4rem;
+			border-radius: 999px;
+			cursor: pointer;
+			z-index: 3;
+		}
+
+		.latest-overlay__close:hover,
+		.latest-overlay__close:focus-visible {
+			background: rgba(0, 0, 0, 0.6);
+		}
+
+		.latest-overlay::after {
+			content: "";
+			position: absolute;
+			inset: 1.2rem;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			pointer-events: none;
+			border-radius: clamp(18px, 3vw, 32px);
+			z-index: 0;
+		}
+
 		@media (max-width: 960px) {
 			.hero {
 				grid-template-columns: 1fr;
@@ -303,4 +532,105 @@ const [featured, ...recent] = videos;
 			}
 		}
 	</style>
+
+	<script type="module">
+		const archiveFallback = "${withBase('/my-videos')}";
+		const cards = Array.from(document.querySelectorAll("[data-latest-card]"));
+		const overlay = document.querySelector("[data-latest-overlay]");
+		if (cards.length && overlay) {
+			const imageEl = overlay.querySelector("[data-latest-image]");
+			const titleEl = overlay.querySelector("[data-latest-title]");
+			const descEl = overlay.querySelector("[data-latest-description]");
+			const closeBtn = overlay.querySelector("[data-latest-close]");
+			const archiveLink = overlay.querySelector("[data-latest-archive-link]");
+			const videoLink = overlay.querySelector("[data-latest-video-link]");
+			let lastFocus = null;
+
+			const setOrigins = (card) => {
+				const rect = card.getBoundingClientRect();
+				const originX = ((rect.left + rect.width / 2) / window.innerWidth) * 100;
+				const originY = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
+				overlay.style.setProperty("--origin-x", `${originX}%`);
+				overlay.style.setProperty("--origin-y", `${originY}%`);
+			};
+
+			const populate = (card) => {
+				const still = card.dataset.image || card.dataset.hero;
+				if (imageEl && still) {
+					imageEl.src = still;
+					imageEl.alt = `Still from the ${card.dataset.title ?? "film"}`;
+				}
+				if (titleEl) titleEl.textContent = card.dataset.title ?? "";
+				if (descEl) descEl.textContent = card.dataset.description ?? "";
+				if (archiveLink) {
+					archiveLink.href = card.dataset.link || archiveLink.getAttribute("href") || archiveFallback;
+				}
+				if (videoLink) {
+					const url = buildWatchUrl(card.dataset.videoUrl);
+					if (url) {
+						videoLink.href = url;
+						videoLink.textContent = "Watch story";
+						videoLink.removeAttribute("hidden");
+					} else {
+						videoLink.setAttribute("hidden", "");
+					}
+				}
+			};
+
+			const openOverlay = (card) => {
+				lastFocus = card;
+				setOrigins(card);
+				populate(card);
+				overlay.removeAttribute("hidden");
+				overlay.setAttribute("aria-hidden", "false");
+				document.documentElement.style.overflow = "hidden";
+				requestAnimationFrame(() => {
+					overlay.dataset.open = "true";
+					closeBtn?.focus({ preventScroll: true });
+				});
+			};
+
+			const closeOverlay = () => {
+				if (overlay.dataset.open !== "true") return;
+				overlay.dataset.open = "false";
+				overlay.setAttribute("aria-hidden", "true");
+				const handleTransitionEnd = (event) => {
+					if (event.target !== overlay || overlay.dataset.open === "true") return;
+					overlay.setAttribute("hidden", "");
+					overlay.removeEventListener("transitionend", handleTransitionEnd);
+				};
+				overlay.addEventListener("transitionend", handleTransitionEnd);
+				document.documentElement.style.overflow = "";
+				lastFocus?.focus?.({ preventScroll: true });
+			};
+
+			cards.forEach((card) => {
+				const activate = () => openOverlay(card);
+				card.addEventListener("click", activate);
+				card.addEventListener("keydown", (event) => {
+					if (event.key === "Enter" || event.key === " ") {
+						event.preventDefault();
+						activate();
+					}
+				});
+			});
+
+			closeBtn?.addEventListener("click", () => closeOverlay());
+			overlay.addEventListener("click", (event) => {
+				if (event.target === overlay) closeOverlay();
+			});
+			document.addEventListener("keydown", (event) => {
+				if (event.key === "Escape") closeOverlay();
+			});
+		}
+
+		function buildWatchUrl(raw) {
+			if (!raw) return "";
+			const embedMatch = raw.match(/\/embed\/([A-Za-z0-9_-]+)/);
+			if (embedMatch) {
+				return `https://www.youtube.com/watch?v=${embedMatch[1]}`;
+			}
+			return raw;
+		}
+	</script>
 </BaseLayout>

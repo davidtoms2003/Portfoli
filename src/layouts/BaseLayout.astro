@@ -13,11 +13,11 @@ const navLinks = [
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="description" content={description || "Portfolio de filmmaker con viajes y diarios visuales."} />
+		<meta name="description" content={description || "Filmmaker portfolio with travel films and visual diaries."} />
 		<title>{pageTitle}</title>
 	<link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
 		<style>
@@ -244,11 +244,11 @@ const navLinks = [
 	</head>
 	<body data-layout>
 		<div class="sidebar-hover-zone" data-sidebar-hover>
-			<button class="sidebar-handle" type="button" aria-label="Abrir menú" aria-expanded="false" data-sidebar-handle>
+			<button class="sidebar-handle" type="button" aria-label="Open menu" aria-expanded="false" data-sidebar-handle>
 				<span class="sidebar-handle__icon">
 					<span class="sidebar-handle__middle"></span>
 				</span>
-				<span class="sidebar-handle__label" aria-hidden="true">Menú</span>
+				<span class="sidebar-handle__label" aria-hidden="true">Menu</span>
 			</button>
 		</div>
 		<aside class="sidebar" data-sidebar>
@@ -270,7 +270,7 @@ const navLinks = [
 			</nav>
 		</aside>
 		<main>
-			<nav class="mobile-nav" aria-label="Navegación principal">
+			<nav class="mobile-nav" aria-label="Primary navigation">
 				{navLinks.map((link) => (
 					<a href={link.href} aria-current={Astro.url.pathname === new URL(link.href, parseBase).pathname ? "page" : undefined}>
 						{link.label}
