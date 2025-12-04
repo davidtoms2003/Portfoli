@@ -79,7 +79,7 @@ const cards = [featured, ...recent];
 			<div class="latest-overlay__actions">
 				<a class="latest-overlay__link" href={withBase("/my-videos")} data-latest-archive-link>Browse archive</a>
 				<a class="latest-overlay__link latest-overlay__link--primary" data-latest-video-link target="_blank" rel="noopener noreferrer">
-					Watch story
+					Watch Now
 				</a>
 			</div>
 		</div>
@@ -569,7 +569,7 @@ const cards = [featured, ...recent];
 					const url = buildWatchUrl(card.dataset.videoUrl);
 					if (url) {
 						videoLink.href = url;
-						videoLink.textContent = "Watch story";
+						videoLink.textContent = "Watch Now";
 						videoLink.removeAttribute("hidden");
 					} else {
 						videoLink.setAttribute("hidden", "");
