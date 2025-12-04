@@ -79,7 +79,7 @@ const cards = [featured, ...recent];
 			<div class="latest-overlay__actions">
 				<a class="latest-overlay__link" href={withBase("/my-videos")} data-latest-archive-link>Browse archive</a>
 				<a class="latest-overlay__link latest-overlay__link--primary" data-latest-video-link target="_blank" rel="noopener noreferrer">
-					Watch Now
+					Watch Story
 				</a>
 			</div>
 		</div>
@@ -443,9 +443,10 @@ const cards = [featured, ...recent];
 		}
 
 		.latest-overlay__actions {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 0.8rem;
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0.75rem;
+			align-items: center;
 		}
 
 		.latest-overlay__link {
@@ -459,6 +460,7 @@ const cards = [featured, ...recent];
 			color: var(--text);
 			background: rgba(255, 255, 255, 0.08);
 			transition: transform 200ms ease, background 200ms ease;
+			text-align: center;
 		}
 
 		.latest-overlay__link--primary {
@@ -475,6 +477,14 @@ const cards = [featured, ...recent];
 		.latest-overlay__link--primary:hover,
 		.latest-overlay__link--primary:focus-visible {
 			background: rgba(247, 245, 239, 0.85);
+		}
+
+		@media (max-width: 520px) {
+			.latest-overlay__link {
+				letter-spacing: 0.2em;
+				font-size: 0.68rem;
+				padding: 0.75rem 1.2rem;
+			}
 		}
 
 		.latest-overlay__close {
@@ -569,7 +579,7 @@ const cards = [featured, ...recent];
 					const url = buildWatchUrl(card.dataset.videoUrl);
 					if (url) {
 						videoLink.href = url;
-						videoLink.textContent = "Watch Now";
+						videoLink.textContent = "Watch Story";
 						videoLink.removeAttribute("hidden");
 					} else {
 						videoLink.setAttribute("hidden", "");
