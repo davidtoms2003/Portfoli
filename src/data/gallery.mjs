@@ -26,6 +26,7 @@ const mapped = autos.map((name) => {
   const src = `/gallery/${name}`;
   let alt = formatCaption(name);
   if (name.toLowerCase().startsWith('colors1')) alt = 'COLORS';
+  else if (name.toLowerCase().startsWith('mina')) alt = 'MINA';
   else if (name.includes('2025-10-11')) alt = 'BALI';
   else if (name.includes('2025-11-10')) alt = 'VALL DE NÚRIA';
   else if (name.includes('2025-10-15')) alt = 'ARMENIA I GEORGIA';

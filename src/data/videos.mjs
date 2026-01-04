@@ -1,5 +1,14 @@
 export const videos = [
   {
+    slug: "mina",
+    title: "MINA",
+    description: "Can a pet be loved more than a human?",
+    hero: "/thumbnails/MINA1.webp",
+    preview: "/thumbnails/MINA4.webp",
+    backdrop: "/thumbnails/MINA3.webp",
+    videoUrl: "https://www.youtube.com/embed/MN2gqVRDMWw?si=K128iHLaNFU5q9vN",
+  },
+  {
     slug: "timisoara",
     title: "Timisoara",
     description:
