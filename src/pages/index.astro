@@ -156,6 +156,7 @@ const cards = videos;
 		.hero__viewport {
 			position: relative;
 			min-height: clamp(420px, 65vh, 620px);
+			min-height: clamp(420px, 65svh, 620px);
 		}
 
 		.hero-slide {
@@ -307,6 +308,7 @@ const cards = videos;
 		.hero__frame img {
 			width: 100%;
 			height: clamp(320px, 60vh, 520px);
+			height: clamp(320px, 60svh, 520px);
 			object-fit: cover;
 			border-radius: clamp(18px, 3vw, 24px);
 			box-shadow: 0 32px 80px rgba(0, 0, 0, 0.45);
@@ -569,6 +571,7 @@ const cards = videos;
 			border-radius: clamp(18px, 4vw, 32px);
 			overflow: hidden;
 			min-height: clamp(280px, 50vh, 480px);
+			min-height: clamp(280px, 50svh, 480px);
 			transform-origin: var(--origin-x, 50%) var(--origin-y, 50%);
 			transform: scale(0.25);
 			transition: transform 460ms cubic-bezier(0.16, 0.84, 0.44, 1);
@@ -689,6 +692,24 @@ const cards = videos;
 		}
 
 		@media (max-width: 960px) {
+			.hero__viewport {
+				min-height: auto;
+				overflow: visible;
+			}
+
+			.hero-slide {
+				position: static;
+				opacity: 1;
+				transform: none;
+				pointer-events: none;
+				display: none;
+			}
+
+			.hero-slide--active {
+				pointer-events: auto;
+				display: block;
+			}
+
 			.hero-slide__grid {
 				grid-template-columns: 1fr;
 				grid-template-areas:
@@ -716,6 +737,8 @@ const cards = videos;
 
 			.hero__controls {
 				gap: 0.5rem;
+				flex-wrap: wrap;
+				justify-content: center;
 			}
 
 			.hero__nav {
@@ -725,8 +748,14 @@ const cards = videos;
 			}
 
 			.hero__dots {
-				flex: 0 1 auto;
+				flex: 0 0 100%;
+				order: 3;
 				gap: 0.4rem;
+			}
+
+			.hero__header h2 {
+				font-size: clamp(2.4rem, 10vw, 3.2rem);
+				letter-spacing: 0.12em;
 			}
 		}
 	</style>
