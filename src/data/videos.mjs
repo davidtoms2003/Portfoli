@@ -1,5 +1,13 @@
 export const videos = [
   {
+    slug: "tromso",
+    title: "TROMSO",
+    description: "Is water always water even though it is in constant change?",
+    hero: "/thumbnails/TROMSO4.webp",
+    preview: "/thumbnails/TROMSO5.webp",
+    backdrop: "/thumbnails/TROMSO2.webp",
+  },
+  {
     slug: "mina",
     title: "MINA",
     description: "Can a pet be loved more than a human?",

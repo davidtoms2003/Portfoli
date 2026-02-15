@@ -829,7 +829,14 @@ const cards = videos;
 			startHeroTimer();
 		}
 
-		const archiveFallback = "${withBase('/my-videos')}";
+		// Extract base URL from current href
+		const getBase = () => {
+			const path = window.location.pathname;
+			const baseParts = path.match(/^(.+?)\/[^/]*\/?$/);
+			return baseParts ? baseParts[1] : "";
+		};
+		
+		const archiveFallback = `${getBase()}/my-videos`;
 		const cards = Array.from(document.querySelectorAll("[data-latest-card]"));
 		const overlay = document.querySelector("[data-latest-overlay]");
 		if (cards.length && overlay) {
