@@ -6,6 +6,7 @@ export const videos = [
     hero: "/thumbnails/TROMSO4.webp",
     preview: "/thumbnails/TROMSO5.webp",
     backdrop: "/thumbnails/TROMSO2.webp",
+    videoUrl: "https://www.youtube.com/embed/DoIoTexT0nE?si=C-mIYIR8S_Q19BDf",
   },
   {
     slug: "mina",
