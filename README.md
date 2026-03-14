@@ -55,3 +55,7 @@ scripts/
 - Replace placeholder images/text with your own content.
 - For best results, place original source images in `public/gallery`; the script generates `.webp` and responsive widths alongside them.
 - On mobile (no hover), the spotlight effect is disabled for performance.
+
+## Acknowledgements
+
+Special thanks to Pasqu, whose help and support throughout this project made it all possible.
