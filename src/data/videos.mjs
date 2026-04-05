@@ -1,5 +1,14 @@
 export const videos = [
   {
+    slug: "noja",
+    title: "NOJA",
+    description: "North of Spain, a car and five friends.",
+    hero: "/thumbnails/NOJA5.webp",
+    preview: "/thumbnails/NOJA1.webp",
+    backdrop: "/thumbnails/NOJA2.webp",
+    videoUrl: "https://www.youtube.com/embed/05kdp_BSkDs?si=kJJd8cgSxfbJMUFI",
+  },
+  {
     slug: "tromso",
     title: "TROMSO",
     description: "Is water always water even though it is in constant change?",

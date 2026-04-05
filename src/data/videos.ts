@@ -1,5 +1,14 @@
 export const videos = [
 	{
+		slug: "noja",
+		title: "Noja",
+		description:
+			"A visual journey through the coastal landscapes and serene beauty of Noja.",
+		hero: "/thumbnails/NOJA1.jpg",
+		preview: "/thumbnails/NOJA2.jpg",
+		embedUrl: "https://www.youtube.com/embed/05kdp_BSkDs?si=kJJd8cgSxfbJMUFI",
+	},
+	{
 		slug: "bali",
 		title: "Bali",
 		description:
