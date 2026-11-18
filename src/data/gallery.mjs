@@ -32,6 +32,7 @@ const mapped = autos.map((name) => {
   else if (name.includes('2025-10-15')) alt = 'ARMENIA I GEORGIA';
   else if (name.toUpperCase().startsWith('VILAMANISCLE')) alt = 'VILAMANISCLE';
   else if (name.toUpperCase().startsWith('NOJA')) alt = 'NOJA';
+  else if (name.toUpperCase().startsWith('JONCS')) alt = 'JONCS';
   return { src, alt, credit: '' };
 });
 
